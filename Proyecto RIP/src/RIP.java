@@ -125,7 +125,7 @@ public class RIP {
 				
 				if (linea.contains(":")) {
 					
-					String[] argsSeparados = linea.split("/");
+					String[] argsSeparados = linea.split(":");
 					String ipRouter = argsSeparados[0];
 					int puertoRouter = 0;
 					
@@ -149,6 +149,11 @@ public class RIP {
 			}
 			
 		}
+		
+		System.out.println("");
+		System.out.println("");
+		System.out.println("LECTURA DEL FICHERO");
+		System.out.println("");
 		
 		for (int i = 0; i < routers.size(); i++) {
 			
