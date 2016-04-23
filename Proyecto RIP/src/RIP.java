@@ -1,6 +1,10 @@
+import java.io.File;
+import java.io.FileInputStream;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.Scanner;
 
 public class RIP {
 
@@ -75,12 +79,91 @@ public class RIP {
 		}
 		
 		
-		
 		System.out.println("IP: " + ip);
 		System.out.println("Puerto: " + puerto);
 		
+	
+		// CARGAR EL ARCHIVO
+	
+		File archivo = new File(System.getProperty("user.dir"),"ripconf-"+ip+".topo");
+		Scanner lector = null;
 		
+		ArrayList<Net> nets = new ArrayList<Net>();
+		ArrayList<Router> routers = new ArrayList<Router>();
+	
+		try {
 		
+			lector = new Scanner(new FileInputStream(archivo));
+		
+		} catch (Exception ex) {
+		
+			System.out.println("El archivo de IPs no existe.");
+			System.exit(-1);
+			
+		}
+		
+		while(lector.hasNextLine()) {
+			
+			String linea = lector.nextLine().trim();
+			
+			if (linea.contains("/")) {
+				
+				String[] argsSeparados = linea.split("/");
+				String ipRed = argsSeparados[0];
+				int lonRed = 0;
+				
+				try {
+					lonRed = Integer.parseInt(argsSeparados[1]);
+				} catch (NumberFormatException ex) {
+					System.out.println("Puerto incorrecto");
+					System.exit(-1);
+				}
+				
+				nets.add(new Net(ipRed,lonRed));
+				
+			} else {
+				
+				if (linea.contains(":")) {
+					
+					String[] argsSeparados = linea.split("/");
+					String ipRouter = argsSeparados[0];
+					int puertoRouter = 0;
+					
+					try {
+						puertoRouter = Integer.parseInt(argsSeparados[1]);
+					} catch (NumberFormatException ex) {
+						System.out.println("Puerto incorrecto");
+						System.exit(-1);
+					}
+					
+					routers.add(new Router(ipRouter,puertoRouter));
+					
+				} else {
+					
+					// Por ahora damos por hecho que no hay errores
+					
+					routers.add(new Router(linea,5512));
+					
+				}
+				
+			}
+			
+		}
+		
+		for (int i = 0; i < routers.size(); i++) {
+			
+			System.out.println(routers.get(i));
+			
+		}
+		
+		System.out.println("");
+		
+		for (int i = 0; i < nets.size(); i++) {
+			
+			System.out.println(nets.get(i));
+			
+		}
+	
 	}
 	
 }
