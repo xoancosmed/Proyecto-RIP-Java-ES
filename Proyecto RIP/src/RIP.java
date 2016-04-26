@@ -77,8 +77,7 @@ public class RIP {
 			System.exit(-1);
 			
 		}
-		
-		
+			
 		System.out.println("IP: " + ip);
 		System.out.println("Puerto: " + puerto);
 		
@@ -86,13 +85,44 @@ public class RIP {
 		// CARGAR EL ARCHIVO
 	
 		File archivo = new File(System.getProperty("user.dir"),"ripconf-"+ip+".topo");
+		
+		ArrayList<Router> routers = new ArrayList<Router>();
+		ArrayList<Net> nets = new ArrayList<Net>();
+	
+		leerArchivo(archivo,routers,nets);
+		
+		System.out.println("");
+		System.out.println("");
+		System.out.println("LECTURA DEL FICHERO");
+		System.out.println("");
+		
+		for (int i = 0; i < routers.size(); i++) {
+			
+			System.out.println(routers.get(i));
+			
+		}
+		
+		System.out.println("");
+		
+		for (int i = 0; i < nets.size(); i++) {
+			
+			System.out.println(nets.get(i));
+			
+		}
+	
+	}
+	
+	
+	/* ************************ */
+	/* ***** Leer Archivo ***** */
+	/* ************************ */
+	
+	private static void leerArchivo (File archivo, ArrayList<Router> routers, ArrayList<Net> nets) {
+		
 		Scanner lector = null;
 		
-		ArrayList<Net> nets = new ArrayList<Net>();
-		ArrayList<Router> routers = new ArrayList<Router>();
-	
 		try {
-		
+			
 			lector = new Scanner(new FileInputStream(archivo));
 		
 		} catch (Exception ex) {
@@ -150,25 +180,7 @@ public class RIP {
 			
 		}
 		
-		System.out.println("");
-		System.out.println("");
-		System.out.println("LECTURA DEL FICHERO");
-		System.out.println("");
-		
-		for (int i = 0; i < routers.size(); i++) {
-			
-			System.out.println(routers.get(i));
-			
-		}
-		
-		System.out.println("");
-		
-		for (int i = 0; i < nets.size(); i++) {
-			
-			System.out.println(nets.get(i));
-			
-		}
-	
 	}
+	
 	
 }

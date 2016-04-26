@@ -1,17 +1,21 @@
+import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.net.SocketTimeoutException;
 import java.util.Date;
 
 public class RIP_E {
 	
-	public static void main2 (String[] args) {
+	public static void main2 (String[] args) throws Exception {
 		
 		int localPrt = 5512; // CAMBIAR
-		String localIP = "localhost"; // CAMBIAR
+		String ip = "localhost"; // CAMBIAR
+		
+		InetAddress localIP = InetAddress.getByName(ip);
 		
 		// Código Estela vvvvv
 		
-		DataSocket ripSocket = new DataSocket(localPrt, localIP);
+		DatagramSocket ripSocket = new DatagramSocket(localPrt, localIP);
 		int socketTimeout = 10000;
 		Date initialDate = new Date();
 		ripSocket.setSoTimeout(socketTimeout);
@@ -20,8 +24,8 @@ public class RIP_E {
 			
 			try {
 				
-				byte[] recData = new byte[];
-				DatagramSocket ds = new DatagramSocket(recDate, );
+				byte[] recData = new byte[25];
+				DatagramPacket ds = new DatagramPacket(recData, 25);
 				ripSocket.receive(ds);
 				Date currentDate = new Date();
 				long elapsedTime = currentDate.getTime() - initialDate.getTime();
