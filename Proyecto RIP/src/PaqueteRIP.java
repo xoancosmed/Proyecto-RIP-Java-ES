@@ -8,6 +8,19 @@ public class PaqueteRIP {
 	private String ip;
 	private int metrica;
 	
+	private byte[] paquete;
+	
+	public PaqueteRIP (int comando, int version, String ip, int metrica) {
+		
+		this.comando = comando;
+		this.version = version;
+		this.ip = ip;
+		this.metrica = metrica;
+		
+		this.paquete = crearPaqueteRIP();
+		
+	}
+	
 	private byte[] crearPaqueteRIP () {
 		
 		byte[] paquete = new byte[25];
@@ -27,6 +40,12 @@ public class PaqueteRIP {
 		paquete[20] = BigInteger.valueOf(metrica).toByteArray()[0];
 		
 		return paquete;
+		
+	}
+	
+	public byte[] obtenerPaquete () {
+		
+		return this.paquete;
 		
 	}
 	
