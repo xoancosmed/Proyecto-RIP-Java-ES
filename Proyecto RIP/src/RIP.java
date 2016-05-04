@@ -1,21 +1,26 @@
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Scanner;
 
 public class RIP {
 
-	public static void main (String[] args) {
+	public static void main (String[] args) throws UnknownHostException, InterruptedException {
 		
-		// OBTENEMOS LA IP Y PUERTO DE LOS PARÁMETROS DE ENTRADA
+		// OBTENEMOS LA IP Y PUERTO DE LOS PARÃ�METROS DE ENTRADA
 		
 		String ip = "";
 		int puerto = 0;
 		
-		if (args.length == 1) { // Si recibimos un parámetro ...
+		if (args.length == 1) { // Si recibimos un parÃ¡metro ...
 			
 			String ipYpuerto = args[0];
 			
@@ -27,18 +32,18 @@ public class RIP {
 				try {
 					puerto = Integer.parseInt(argsSeparados[1]);
 				} catch (NumberFormatException ex) {
-					System.out.println("Parámetro de entrada incorrecto");
+					System.out.println("ParÃ¡metro de entrada incorrecto");
 					System.exit(-1);
 				}
 				
-			} else { // ... sino, el parámetro es sólo la IP
+			} else { // ... sino, el parÃ¡metro es sÃ³lo la IP
 				
 				ip = ipYpuerto;
 				puerto = 5512;
 				
 			}
 			
-		} else if (args.length == 0) { // Si no recibimos ningún parámetro ...
+		} else if (args.length == 0) { // Si no recibimos ningÃºn parÃ¡metro ...
 			
 			puerto = 5512; // ... se usan los valores por defecto
 			
@@ -71,13 +76,17 @@ public class RIP {
 				
 			}
 			
-		} else { // Si no es ninguno de esos casos, el número de parámetros es incorrecto
+		} else { // Si no es ninguno de esos casos, el nÃºmero de parÃ¡metros es incorrecto
 			
-			System.out.println("Número de parámetros incorrecto");
+			System.out.println("NÃºmero de parÃ¡metros incorrecto");
 			System.exit(-1);
 			
 		}
-			
+			if(ip.equals("")){
+				InetAddress hola;
+				hola=InetAddress.getLocalHost();
+				ip=hola.getHostAddress();
+			}
 		System.out.println("IP: " + ip);
 		System.out.println("Puerto: " + puerto);
 		
@@ -109,7 +118,17 @@ public class RIP {
 			System.out.println(nets.get(i));
 			
 		}
-	
+		
+		
+		try {
+			EstablecerConexion(routers);
+		} catch (IOException e) {
+			System.out.println("Errores en EnviarPAquete");
+			
+			
+		}
+		
+
 	}
 	
 	
@@ -179,6 +198,36 @@ public class RIP {
 			}
 			
 		}
+		
+	}
+	
+	
+	private static void EnviarPaquete(String IpRemota) throws IOException{
+
+		
+		PaqueteRIP PacketEnvio = new PaqueteRIP(1,1,IpRemota,1); //Creamos el paquete para enviar
+		InetAddress address = InetAddress.getByName(IpRemota);
+		DatagramPacket packet = new DatagramPacket(PacketEnvio.obtenerPaquete(),PacketEnvio.obtenerPaquete().length,address,5512);
+		DatagramSocket datagramSocket = new DatagramSocket();
+		
+        datagramSocket.send(packet);
+        System.out.println("Paquete enviado a "+IpRemota+ " Yo Envie : "+ PacketEnvio.obtenerPaquete()+" De longitud "+PacketEnvio.obtenerPaquete().length);
+		
+       // datagramSocket.receive(packet);
+        //System.out.println("Paquete respuesta recibido a "+packet.getData().toString());
+        
+	}
+	
+	
+	private static void EstablecerConexion(ArrayList routers) throws IOException, InterruptedException{
+		
+		for(int i=0;i<routers.size();i++){
+			
+			EnviarPaquete(((Router)routers.get(i)).getIp());
+			Thread.sleep(3000);
+			
+		}
+		
 		
 	}
 	
