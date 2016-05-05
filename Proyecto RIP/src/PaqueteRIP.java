@@ -10,6 +10,25 @@ public class PaqueteRIP {
 	
 	private byte[] paquete;
 	
+	
+	
+	
+	public int getMetrica() {
+		return metrica;
+	}
+
+	public void setMetrica(int metrica) {
+		this.metrica = metrica;
+	}
+
+	public String getIp() {
+		return ip;
+	}
+
+	public void setIp(String ip) {
+		this.ip = ip;
+	}
+
 	public PaqueteRIP (int comando, int version, String ip, int metrica) {
 		
 		this.comando = comando;
@@ -32,9 +51,9 @@ public class PaqueteRIP {
 		// Aquí address-family-idenfifier
 		
 		tmp = paquete[8];
-		ip = Integer.toString(tmp.intValue()) + ".";
+		ip = Integer.toString(tmp.intValue()+256) + ".";
 		tmp = paquete[9];
-		ip += Integer.toString(tmp.intValue()) + ".";
+		ip += Integer.toString(tmp.intValue()+256) + ".";
 		tmp = paquete[10];
 		ip += Integer.toString(tmp.intValue()) + ".";
 		tmp = paquete[11];

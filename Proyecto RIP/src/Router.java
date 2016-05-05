@@ -5,6 +5,7 @@ public class Router {
 	
 	private String ip;
 	private int puerto;
+	private int distancia;
 	
 	
 	// CONSTRUCTORES
@@ -14,6 +15,12 @@ public class Router {
 		this.ip = ip;
 		this.puerto = puerto;
 		
+	}
+	
+	public Router ( int distancia,String ip) {
+		
+		this.ip = ip;
+		this.distancia = distancia;
 	}
 	
 	

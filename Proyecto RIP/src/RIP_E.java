@@ -9,7 +9,7 @@ public class RIP_E {
 	public static void main (String[] args) throws Exception {
 		
 		int localPrt = 5512; // CAMBIAR
-		String ip = "localhost"; // CAMBIAR
+		String ip = "192.168.1.110"; // CAMBIAR
 		
 		InetAddress localIP = InetAddress.getByName(ip);
 		

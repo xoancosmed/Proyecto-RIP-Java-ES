@@ -8,14 +8,19 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.Scanner;
 
 public class RIP {
-
+	
+	
+	
 	public static void main (String[] args) throws UnknownHostException, InterruptedException {
 		
 		// OBTENEMOS LA IP Y PUERTO DE LOS PARÃ�METROS DE ENTRADA
+		
+		ArrayList<Router> Tabla = new ArrayList<Router>();
 		
 		String ip = "";
 		int puerto = 0;
@@ -121,7 +126,7 @@ public class RIP {
 		
 		
 		try {
-			EstablecerConexion(routers);
+			EstablecerConexion(routers,ip,puerto);
 		} catch (IOException e) {
 			System.out.println("Errores en EnviarPAquete");
 			
@@ -212,24 +217,66 @@ public class RIP {
 		
         datagramSocket.send(packet);
         System.out.println("Paquete enviado a "+IpRemota+ " Yo Envie : "+ PacketEnvio.obtenerPaquete()+" De longitud "+PacketEnvio.obtenerPaquete().length);
-        System.out.println("\n\nPAQUETE:\n");
-        System.out.print(PacketEnvio.toString());
+        System.out.print("\n"+PacketEnvio.toString());
 		
-       // datagramSocket.receive(packet);
-        //System.out.println("Paquete respuesta recibido a "+packet.getData().toString());
         
 	}
 	
 	
-	private static void EstablecerConexion(ArrayList routers) throws IOException, InterruptedException{
+	private static void EstablecerConexion(ArrayList routers,String ip, int puerto) throws IOException, InterruptedException{
 		
-		for(int i=0;i<routers.size();i++){
+		InetAddress localIP = InetAddress.getByName(ip);
+		DatagramSocket ripSocket = new DatagramSocket(puerto, localIP);
+		int socketTimeout = 10000;
+		Date initialDate = new Date();
+		ripSocket.setSoTimeout(socketTimeout);
+		byte[] recData = new byte[25];
+		DatagramPacket ds = new DatagramPacket(recData, 25);
+		int contador=0;
+		
+		ArrayList<Router> Tabla = new ArrayList<Router>();
+		ArrayList<PaqueteRIP> Reenvios = new ArrayList<PaqueteRIP>(); 
+		
+		while(true){
 			
-			EnviarPaquete(((Router)routers.get(i)).getIp());
-			Thread.sleep(3000);
 			
+			if(contador==0){
+				for(int i=0;i<routers.size();i++){
+			
+					EnviarPaquete(((Router)routers.get(i)).getIp());  //Enviamos el primer paquete a todos los vecinos
+			
+				}
+			}
+			
+			for(int i = 0; i<Reenvios.size();i++){
+				
+				EnviarPaquete(Reenvios.get(i).getIp());				//Reenviamos los paquetes que no son para nosotros
+				
+			}
+			
+			ripSocket.receive(ds);										//Recibimos el paquete RIP
+			
+			/*Date currentDate = new Date();
+			long elapsedTime = currentDate.getTime() - initialDate.getTime();  //Estelas' Code
+			ripSocket.setSoTimeout(socketTimeout - (int)elapsedTime);*/
+			
+			PaqueteRIP Recibido= new PaqueteRIP(recData);    //		Instanciamos el paquete Recibido
+			Recibido.aumentarMetrica();						//		Aumentamos en 1 su metrica
+			
+			System.out.println("\nPaquete recibido\n \n"+new PaqueteRIP(recData).toString());
+			
+			if(!Recibido.getIp().equals(ip)){						//		¿Es para nosotros?
+				Reenvios.add(Recibido);								//		En caso negativo lo añadimos a una lista de reenvios
+				continue;
+			}														//
+			
+			Tabla.add(new Router(Recibido.getIp(),Recibido.getMetrica())); 		// En caso negativo añadimos un nuevo vecino a la tabla
+			
+			Thread.sleep(9000);
+		
+		
+		
 		}
-		
 		
 	}
 	
