@@ -6,7 +6,7 @@ import java.util.Date;
 
 public class RIP_E {
 	
-	public static void main2 (String[] args) throws Exception {
+	public static void main (String[] args) throws Exception {
 		
 		int localPrt = 5512; // CAMBIAR
 		String ip = "localhost"; // CAMBIAR
@@ -20,6 +20,7 @@ public class RIP_E {
 		Date initialDate = new Date();
 		ripSocket.setSoTimeout(socketTimeout);
 		
+		
 		while (true) {
 			
 			try {
@@ -30,6 +31,8 @@ public class RIP_E {
 				Date currentDate = new Date();
 				long elapsedTime = currentDate.getTime() - initialDate.getTime();
 				ripSocket.setSoTimeout(socketTimeout - (int)elapsedTime);
+				
+				System.out.println(new PaqueteRIP(recData).toString());
 				
 				// Codigo aquí
 				

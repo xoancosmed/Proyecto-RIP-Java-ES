@@ -205,13 +205,15 @@ public class RIP {
 	private static void EnviarPaquete(String IpRemota) throws IOException{
 
 		
-		PaqueteRIP PacketEnvio = new PaqueteRIP(1,1,IpRemota,1); //Creamos el paquete para enviar
+		PaqueteRIP PacketEnvio = new PaqueteRIP(1,1,IpRemota,0); //Creamos el paquete para enviar
 		InetAddress address = InetAddress.getByName(IpRemota);
 		DatagramPacket packet = new DatagramPacket(PacketEnvio.obtenerPaquete(),PacketEnvio.obtenerPaquete().length,address,5512);
 		DatagramSocket datagramSocket = new DatagramSocket();
 		
         datagramSocket.send(packet);
         System.out.println("Paquete enviado a "+IpRemota+ " Yo Envie : "+ PacketEnvio.obtenerPaquete()+" De longitud "+PacketEnvio.obtenerPaquete().length);
+        System.out.println("\n\nPAQUETE:\n");
+        System.out.print(PacketEnvio.toString());
 		
        // datagramSocket.receive(packet);
         //System.out.println("Paquete respuesta recibido a "+packet.getData().toString());

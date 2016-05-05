@@ -21,7 +21,34 @@ public class PaqueteRIP {
 		
 	}
 	
-	private byte[] crearPaqueteRIP () {
+	public PaqueteRIP (byte[] paquete) {
+		
+		Byte tmp = paquete[0];
+		comando = tmp.intValue();
+		
+		tmp = paquete[1];
+		version = tmp.intValue();
+		
+		// Aquí address-family-idenfifier
+		
+		tmp = paquete[8];
+		ip = Integer.toString(tmp.intValue()) + ".";
+		tmp = paquete[9];
+		ip += Integer.toString(tmp.intValue()) + ".";
+		tmp = paquete[10];
+		ip += Integer.toString(tmp.intValue()) + ".";
+		tmp = paquete[11];
+		ip += Integer.toString(tmp.intValue());
+		
+		tmp = paquete[20];
+		metrica = tmp.intValue();
+		
+		
+		this.paquete = paquete;
+		
+	}
+	
+	public byte[] crearPaqueteRIP () {
 		
 		byte[] paquete = new byte[25];
 		
@@ -49,6 +76,12 @@ public class PaqueteRIP {
 		
 	}
 	
+	public void aumentarMetrica() {
+		
+		metrica++;
+		
+	}
+	
 	private byte[] convertirIp (String ipString) {
 		
 		byte[] ipBytes = null;
@@ -71,6 +104,19 @@ public class PaqueteRIP {
 		String mascara = String.format("%d.%d.%d.%d", (bits & 0x0000000000ff000000L) >> 24, (bits & 0x0000000000ff0000) >> 16, (bits & 0x0000000000ff00) >> 8, bits & 0xff);
 
 		return mascara;
+		
+	}
+	
+	public String toString() {
+		
+		String paqueteString;
+		
+		paqueteString = "Comando: " + comando + "\n";
+		paqueteString += "Versión: " + version + "\n";
+		paqueteString += "IP: " + ip + "\n";
+		paqueteString += "Métrica: " + metrica + "\n";
+		
+		return paqueteString;
 		
 	}
 
