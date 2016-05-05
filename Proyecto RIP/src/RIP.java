@@ -250,27 +250,31 @@ public class RIP {
 			
 			for(int i = 0; i<Reenvios.size();i++){
 				
-				EnviarPaquete(Reenvios.get(i).getIp());				//Reenviamos los paquetes que no son para nosotros
+				EnviarPaquete(Reenvios.get(i).getIp());				//Reenviamos los paquetes que no sean nuestros
 				
 			}
 			
-			ripSocket.receive(ds);										//Recibimos el paquete RIP
+			while (ripSocket.getReceiveBufferSize() > 0) { // Si hay paquetes que recibir los leemos de la cola
 			
-			/*Date currentDate = new Date();
-			long elapsedTime = currentDate.getTime() - initialDate.getTime();  //Estelas' Code
-			ripSocket.setSoTimeout(socketTimeout - (int)elapsedTime);*/
-			
-			PaqueteRIP Recibido= new PaqueteRIP(recData);    //		Instanciamos el paquete Recibido
-			Recibido.aumentarMetrica();						//		Aumentamos en 1 su metrica
-			
-			System.out.println("\nPaquete recibido\n \n"+new PaqueteRIP(recData).toString());
-			
-			if(!Recibido.getIp().equals(ip)){						//		¿Es para nosotros?
-				Reenvios.add(Recibido);								//		En caso negativo lo añadimos a una lista de reenvios
-				continue;
-			}														//
-			
-			Tabla.add(new Router(Recibido.getIp(),Recibido.getMetrica())); 		// En caso negativo añadimos un nuevo vecino a la tabla
+				ripSocket.receive(ds);										//Recibimos el paquete RIP
+				
+				/*Date currentDate = new Date();
+				long elapsedTime = currentDate.getTime() - initialDate.getTime();  //Estelas' Code
+				ripSocket.setSoTimeout(socketTimeout - (int)elapsedTime);*/
+				
+				PaqueteRIP Recibido= new PaqueteRIP(recData);    //		Instanciamos el paquete Recibido
+				Recibido.aumentarMetrica();						//		Aumentamos en 1 su metrica
+				
+				System.out.println("\nPaquete recibido\n \n"+new PaqueteRIP(recData).toString());
+				
+				if(!Recibido.getIp().equals(ip)){						//		¿Es nuestro?
+					Reenvios.add(Recibido);								//		En caso negativo lo añadimos a una lista de reenvios
+					continue;
+				}														//
+				
+				Tabla.add(new Router(Recibido.getIp(),Recibido.getMetrica())); 		// En caso negativo añadimos un nuevo vecino a la tabla
+				
+			}
 			
 			Thread.sleep(9000);
 		
