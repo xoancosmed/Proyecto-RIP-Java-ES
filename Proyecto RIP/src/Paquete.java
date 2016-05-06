@@ -1,13 +1,22 @@
 import java.math.BigInteger;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/* ***************** */
+/* **** Paquete **** */
+/* ***************** */
+
 public class Paquete {
+	
+	// ATRIBUTOS
 	
 	private ArrayList<Byte> paquete;
 	private int numEntradas = 0;
 	private boolean password = false;
+	
+	// CONSTRUCTOR
 	
 	public Paquete () {
 		
@@ -15,18 +24,16 @@ public class Paquete {
 		
 	}
 	
+	// MÉTODOS
+	
 	private void añadirCabecera () {
 		
 		paquete = new ArrayList<Byte>();
 		
-		paquete.add((byte) 0x0); // Comando
-		paquete.add(BigInteger.valueOf(0x2).toByteArray()[0]);
+		paquete.add(BigInteger.valueOf(0x2).toByteArray()[0]); // Comando
 		
-		paquete.add((byte) 0x0); // Version
-		paquete.add(BigInteger.valueOf(0x2).toByteArray()[0]);
+		paquete.add(BigInteger.valueOf(0x2).toByteArray()[0]); // Version
 		
-		paquete.add((byte) 0x0);
-		paquete.add((byte) 0x0);
 		paquete.add((byte) 0x0);
 		paquete.add((byte) 0x0);
 		
@@ -51,7 +58,7 @@ public class Paquete {
 		
 	}
 	
-	public byte[] obtener() {
+	public byte[] obtenerPaquete() {
 		
 		byte[] paqueteBytes = new byte[paquete.size()];
 		
@@ -62,19 +69,89 @@ public class Paquete {
 		
 	}
 	
+	/* *************** */
+	/* **** RIPv2 **** */
+	/* *************** */
+	
 	public class RIPv2 {
+		
+		// ATRIBUTOS
 		
 		private String ip;
 		private String mascara;
 		private int coste;
 		
-		public RIPv2(String ip, String mascara, int coste) {
+		// CONSTRUCTORES
+		
+		public RIPv2 (String ip, String mascara, int coste) {
 			
 			this.ip = ip;
 			this.mascara = mascara;
 			this.coste = coste;
 			
 		}
+		
+		public RIPv2 (String ip, int longitud, int coste) {
+			
+			this.ip = ip;
+			this.mascara = convertirLongitudAMascara(longitud);
+			this.coste = coste;
+			
+		}
+		
+		public RIPv2 (byte[] paquete) {
+			
+			byte[] ipBytes = new byte[4];
+			ipBytes[0] = paquete[4];
+			ipBytes[1] = paquete[5];
+			ipBytes[2] = paquete[6];
+			ipBytes[3] = paquete[7];
+			ip = convertirIp(ipBytes);
+			
+			byte[] mascaraBytes = new byte[4];
+			mascaraBytes[0] = paquete[4];
+			mascaraBytes[1] = paquete[5];
+			mascaraBytes[2] = paquete[6];
+			mascaraBytes[3] = paquete[7];
+			mascara = convertirMascara(mascaraBytes);
+			
+			byte[] costeBytes = new byte[4];
+			mascaraBytes[0] = paquete[16];
+			mascaraBytes[1] = paquete[17];
+			mascaraBytes[2] = paquete[18];
+			mascaraBytes[3] = paquete[19];
+			
+			// FALTA OBTENER COSTE !!!!!!!!!!!
+			
+		}
+		
+		public RIPv2 (Byte[] paquete) {
+			
+			byte[] ipBytes = new byte[4];
+			ipBytes[0] = paquete[4];
+			ipBytes[1] = paquete[5];
+			ipBytes[2] = paquete[6];
+			ipBytes[3] = paquete[7];
+			ip = convertirIp(ipBytes);
+			
+			byte[] mascaraBytes = new byte[4];
+			mascaraBytes[0] = paquete[4];
+			mascaraBytes[1] = paquete[5];
+			mascaraBytes[2] = paquete[6];
+			mascaraBytes[3] = paquete[7];
+			mascara = convertirMascara(mascaraBytes);
+			
+			byte[] costeBytes = new byte[4];
+			mascaraBytes[0] = paquete[16];
+			mascaraBytes[1] = paquete[17];
+			mascaraBytes[2] = paquete[18];
+			mascaraBytes[3] = paquete[19];
+			
+			// FALTA OBTENER COSTE !!!!!!!!!!!
+			
+		}
+		
+		// MÉTODOS
 		
 		public Byte[] obtener() {
 			
@@ -132,6 +209,20 @@ public class Paquete {
 			
 		}
 		
+		private String convertirIp (byte[] ipBytes) {
+			
+			String ipString = null;
+			
+			try {
+				ip = InetAddress.getByAddress(ipBytes).getCanonicalHostName();
+			} catch (UnknownHostException e) {
+				e.printStackTrace();
+			}
+			
+			return ipString;
+			
+		}
+		
 		private String convertirLongitudAMascara (int longitud) {
 			
 			long bits = 0xffffffff ^ (1 << 32 - longitud) - 1;
@@ -141,10 +232,48 @@ public class Paquete {
 			
 		}
 		
-		private byte[] convertirMascara (String mascara) {
+		private byte[] convertirMascara (String mascaraString) {
 			
-			return convertirIp (mascara);
+			return convertirIp (mascaraString);
 			
+		}
+		
+		private String convertirMascara (byte[] mascaraBytes) {
+			
+			return convertirIp (mascaraBytes);
+			
+		}
+		
+		public void aumentarCoste () {
+			
+			coste++;
+			
+		}
+		
+		// GETTERS & SETTERS
+		
+		public String getIp() {
+			return ip;
+		}
+
+		public void setIp(String ip) {
+			this.ip = ip;
+		}
+
+		public String getMascara() {
+			return mascara;
+		}
+
+		public void setMascara(String mascara) {
+			this.mascara = mascara;
+		}
+
+		public int getCoste() {
+			return coste;
+		}
+
+		public void setCoste(int coste) {
+			this.coste = coste;
 		}
 		
 	}
