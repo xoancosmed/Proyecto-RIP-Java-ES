@@ -17,6 +17,7 @@ public class RIP {
 	
 	private static String ip = null;
 	private static int puerto = 0;
+	private static DatagramSocket datagramSocket = null;
 	
 	public static void main (String[] args) throws UnknownHostException, InterruptedException {
 		
@@ -128,13 +129,20 @@ public class RIP {
 		
 		
 		try {
+			datagramSocket = new DatagramSocket(puerto,InetAddress.getByName(ip));
+		} catch (SocketException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		try {
 			EstablecerConexion(routers,ip,puerto);
 		} catch (IOException e) {
 			System.out.println("Errores en EnviarPAquete");
 			e.printStackTrace();
-			
-			
 		}
+		
+		datagramSocket.close();
 		
 
 	}
@@ -215,18 +223,13 @@ public class RIP {
 		System.out.println("IP destino: " + IpRemota + "\nPuerto destino: " + puertoDestino);
 		
 		PaqueteRIP PacketEnvio = new PaqueteRIP(1,1,IpRemota,0); //Creamos el paquete para enviar
+		
 		InetAddress address = InetAddress.getByName(IpRemota);
 		DatagramPacket packet = new DatagramPacket(PacketEnvio.obtenerPaquete(),PacketEnvio.obtenerPaquete().length,address,puertoDestino);
-		
-		
-		InetAddress ipLocal = InetAddress.getByName(ip);
-		DatagramSocket datagramSocket = new DatagramSocket(puerto,ipLocal);
 		
         datagramSocket.send(packet);
         System.out.println("Paquete enviado a "+IpRemota+ " Yo Envie : "+ PacketEnvio.obtenerPaquete()+" De longitud "+PacketEnvio.obtenerPaquete().length);
         System.out.print("\n"+PacketEnvio.toString());
-        
-        datagramSocket.close();
 		
         
 	}
