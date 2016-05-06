@@ -226,7 +226,7 @@ public class RIP {
 	}
 	
 	
-	private static void EstablecerConexion(ArrayList routers,String ip, int puerto) throws IOException, InterruptedException{
+	private static void EstablecerConexion(ArrayList<Router> routers,String ip, int puerto) throws IOException, InterruptedException{
 		
 		InetAddress localIP = InetAddress.getByName(ip);
 		DatagramSocket ripSocket = new DatagramSocket(puerto, localIP);
@@ -235,10 +235,8 @@ public class RIP {
 		ripSocket.setSoTimeout(socketTimeout);
 		byte[] recData = new byte[25];
 		DatagramPacket ds = new DatagramPacket(recData, 25);
-		int contador=0;
 		
 		ArrayList<Router> tabla = new ArrayList<Router>();
-		ArrayList<PaqueteRIP> reenvios = new ArrayList<PaqueteRIP>(); 
 		
 		while(true){
 			
@@ -276,6 +274,9 @@ public class RIP {
 			
 			} catch (SocketTimeoutException e) {
 				
+				socketTimeout = 10000;
+				initialDate = new Date();
+				ripSocket.setSoTimeout(socketTimeout);
 				continue;
 				
 			}
@@ -319,7 +320,7 @@ public class RIP {
 		try {
 			
 			InetAddress address = InetAddress.getByName(paquete.getIp());
-			DatagramPacket packet = new DatagramPacket(paquete.obtenerPaquete(),paquete.obtenerPaquete().length,address,5512);
+			DatagramPacket packet = new DatagramPacket(paquete.obtenerPaquete(),paquete.obtenerPaquete().length,address,puerto);
 			DatagramSocket datagramSocket = new DatagramSocket();
 			
 	        datagramSocket.send(packet);
