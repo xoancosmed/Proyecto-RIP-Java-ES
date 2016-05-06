@@ -212,6 +212,7 @@ public class RIP {
 	
 	private static void EnviarPaquete(String IpRemota, int puertoDestino) throws IOException{
 
+		System.out.println("IP destino: " + IpRemota + "\nPuerto destino: " + puertoDestino);
 		
 		PaqueteRIP PacketEnvio = new PaqueteRIP(1,1,IpRemota,0); //Creamos el paquete para enviar
 		InetAddress address = InetAddress.getByName(IpRemota);
