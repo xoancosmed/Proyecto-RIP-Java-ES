@@ -238,7 +238,7 @@ public class RIP {
 	private static void EstablecerConexion(ArrayList<Router> routers,String ip, int puerto) throws IOException, InterruptedException{
 		
 		InetAddress localIP = InetAddress.getByName(ip);
-		DatagramSocket ripSocket = new DatagramSocket(puerto, localIP);
+		DatagramSocket ripSocket = datagramSocket;
 		int socketTimeout = 10000;
 		Date initialDate = new Date();
 		ripSocket.setSoTimeout(socketTimeout);
