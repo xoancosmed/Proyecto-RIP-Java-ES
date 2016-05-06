@@ -15,7 +15,8 @@ import java.util.Scanner;
 
 public class RIP {
 	
-	
+	private static String ip = null;
+	private static int puerto = 0;
 	
 	public static void main (String[] args) throws UnknownHostException, InterruptedException {
 		
@@ -23,8 +24,8 @@ public class RIP {
 		
 		ArrayList<Router> Tabla = new ArrayList<Router>();
 		
-		String ip = "";
-		int puerto = 0;
+		ip = "";
+		puerto = 0;
 		
 		if (args.length == 1) { // Si recibimos un parÃ¡metro ...
 			
@@ -209,12 +210,12 @@ public class RIP {
 	}
 	
 	
-	private static void EnviarPaquete(String IpRemota) throws IOException{
+	private static void EnviarPaquete(String IpRemota, int puerto) throws IOException{
 
 		
 		PaqueteRIP PacketEnvio = new PaqueteRIP(1,1,IpRemota,0); //Creamos el paquete para enviar
 		InetAddress address = InetAddress.getByName(IpRemota);
-		DatagramPacket packet = new DatagramPacket(PacketEnvio.obtenerPaquete(),PacketEnvio.obtenerPaquete().length,address,5512);
+		DatagramPacket packet = new DatagramPacket(PacketEnvio.obtenerPaquete(),PacketEnvio.obtenerPaquete().length,address,puerto);
 		DatagramSocket datagramSocket = new DatagramSocket();
 		
         datagramSocket.send(packet);
@@ -245,14 +246,8 @@ public class RIP {
 			
 			for(int i=0;i<routers.size();i++){
 			
-				EnviarPaquete(((Router)routers.get(i)).getIp());  //Enviamos el primer paquete a todos los vecinos
+				EnviarPaquete(((Router)routers.get(i)).getIp(),((Router)routers.get(i)).getPuerto());  //Enviamos el primer paquete a todos los vecinos
 			
-			}
-			
-			for(int i = 0; i<reenvios.size();i++){
-				
-				EnviarPaquete(reenvios.get(i).getIp());				//Reenviamos los paquetes que no sean nuestros
-				
 			}
 			
 			// while (ripSocket.getReceiveBufferSize() > 0) // Si hay paquetes que recibir los leemos de la cola
@@ -268,7 +263,12 @@ public class RIP {
 				Recibido.aumentarMetrica();						//		Aumentamos en 1 su metrica
 				
 				System.out.println("\nPaquete recibido\n \n"+new PaqueteRIP(recData).toString());
-																		//
+					
+				if (!Recibido.getIp().equalsIgnoreCase(ip)) {
+					
+					reenviarPaquete(Recibido);
+					
+				}
 				
 				Router routerNuevo = new Router(Recibido.getIp(),Recibido.getMetrica());
 				
