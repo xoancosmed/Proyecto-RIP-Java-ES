@@ -1,14 +1,25 @@
+import java.util.Iterator;
 import java.util.TreeMap;
+
+/* *************** */
+/* **** Tabla **** */
+/* *************** */
 
 public class Tabla {
 	
+	// ATRIBUTO
+	
 	private TreeMap<String,ElementoTabla> tabla;
+	
+	// CONSTRUCTOR
 	
 	public Tabla() {
 		
 		tabla = new TreeMap<String,ElementoTabla>();
 		
 	}
+	
+	// MÉTODOS
 	
 	public void añadirElemento (ElementoTabla nuevo) {
 		
@@ -50,22 +61,68 @@ public class Tabla {
 		
 	}
 	
+	public void imprimirTabla() {
+		
+		System.out.println("SUBRED ----- MASCARA ----- G ----- Vecino ----- Coste");
+		System.out.println("");
+		
+		Iterator<String> it = tabla.keySet().iterator();
+		while(it.hasNext()) System.out.println(tabla.get(it.next()).toString());
+		
+	}
+	
+	
+	/* *********************** */
+	/* **** ElementoTabla **** */
+	/* *********************** */
+	
 	public class ElementoTabla {
 
+		// ATRIBUTOS
+		
 		private String subred;
 		private String mascara;
 		private int g;
 		private String vecino;
 		private int coste;
 		
-		public ElementoTabla(String subred, String mascara, int g, String vecino, int coste) {
-			super();
+		// CONSTRUCTORES
+		
+		public ElementoTabla () {
+			
+		}
+		
+		public ElementoTabla (String subred, String mascara, int g, String vecino, int coste) {
+			
 			this.subred = subred;
 			this.mascara = mascara;
 			this.g = g;
 			this.vecino = vecino;
 			this.coste = coste;
+			
 		}
+		
+		// MÉTODO
+		
+		public String toString () {
+			
+			String string;
+			
+			string = subred;
+			string += "-";
+			string += mascara;
+			string += "-";
+			string += Integer.toString(g);
+			string += "-";
+			string += vecino;
+			string += "-";
+			string += Integer.toString(coste);
+			
+			return string;
+			
+		}
+		
+		// GETTERS & SETTERS
 
 		public String getSubred() {
 			return subred;
