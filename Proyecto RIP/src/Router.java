@@ -21,6 +21,7 @@ public class Router {
 		
 		this.ip = ip;
 		this.distancia = distancia;
+		
 	}
 	
 	
@@ -28,7 +29,15 @@ public class Router {
 	
 	public String toString() {
 		
-		return ip + ":" + puerto;
+		if (distancia == 0) {
+			return ip + ":" + puerto;
+		}
+		
+		if (puerto == 0) {
+			return ip + "\t\t" + distancia;
+		}
+		
+		return ip + ":" + puerto + "\t\t" + distancia;
 		
 	}
 	
@@ -37,6 +46,14 @@ public class Router {
 
 	public String getIp() {
 		return ip;
+	}
+	
+	public int getDistancia() {
+		return distancia;
+	}
+	
+	public void setDistancia(int distancia) {
+		this.distancia = distancia;
 	}
 
 	public void setIp(String ip) {

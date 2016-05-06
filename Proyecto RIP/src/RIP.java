@@ -6,6 +6,7 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -234,11 +235,12 @@ public class RIP {
 		DatagramPacket ds = new DatagramPacket(recData, 25);
 		int contador=0;
 		
-		ArrayList<Router> Tabla = new ArrayList<Router>();
-		ArrayList<PaqueteRIP> Reenvios = new ArrayList<PaqueteRIP>(); 
+		ArrayList<Router> tabla = new ArrayList<Router>();
+		ArrayList<PaqueteRIP> reenvios = new ArrayList<PaqueteRIP>(); 
 		
 		while(true){
 			
+			imprimirTabla(tabla);
 			
 			if(contador==0){
 				for(int i=0;i<routers.size();i++){
@@ -248,40 +250,71 @@ public class RIP {
 				}
 			}
 			
-			for(int i = 0; i<Reenvios.size();i++){
+			for(int i = 0; i<reenvios.size();i++){
 				
-				EnviarPaquete(Reenvios.get(i).getIp());				//Reenviamos los paquetes que no sean nuestros
+				EnviarPaquete(reenvios.get(i).getIp());				//Reenviamos los paquetes que no sean nuestros
 				
 			}
 			
 			// while (ripSocket.getReceiveBufferSize() > 0) // Si hay paquetes que recibir los leemos de la cola
-			
-			ripSocket.receive(ds);										//Recibimos el paquete RIP
-
-			/*Date currentDate = new Date();
-			long elapsedTime = currentDate.getTime() - initialDate.getTime();  //Estelas' Code
-			ripSocket.setSoTimeout(socketTimeout - (int)elapsedTime);*/
-			
-			PaqueteRIP Recibido= new PaqueteRIP(recData);    //		Instanciamos el paquete Recibido
-			Recibido.aumentarMetrica();						//		Aumentamos en 1 su metrica
-			
-			System.out.println("\nPaquete recibido\n \n"+new PaqueteRIP(recData).toString());
-			
-			if(!Recibido.getIp().equals(ip)){						//		¿Es nuestro?
-				Reenvios.add(Recibido);								//		En caso negativo lo añadimos a una lista de reenvios
-				continue;
-			}														//
-			
-			Tabla.add(new Router(Recibido.getIp(),Recibido.getMetrica())); 		// En caso negativo añadimos un nuevo vecino a la tabla
+			try {
 				
-
-			Thread.sleep(900);
-		
-		
+				ripSocket.receive(ds);										//Recibimos el paquete RIP
+	
+				Date currentDate = new Date();
+				long elapsedTime = currentDate.getTime() - initialDate.getTime();  //Estelas' Code
+				ripSocket.setSoTimeout(socketTimeout - (int)elapsedTime);
+				
+				PaqueteRIP Recibido= new PaqueteRIP(recData);    //		Instanciamos el paquete Recibido
+				Recibido.aumentarMetrica();						//		Aumentamos en 1 su metrica
+				
+				System.out.println("\nPaquete recibido\n \n"+new PaqueteRIP(recData).toString());
+				
+				if(!Recibido.getIp().equals(ip)){						//		¿Es nuestro?
+					reenvios.add(Recibido);								//		En caso negativo lo añadimos a una lista de reenvios
+					continue;
+				}														//
+				
+				Router routerNuevo = new Router(Recibido.getIp(),Recibido.getMetrica());
+				
+				 añadirTabla(tabla,routerNuevo); // En caso negativo añadimos un nuevo vecino a la tabla		
+			
+			} catch (SocketTimeoutException e) {
+				
+				continue;
+				
+			}
 		
 		}
 		
 	}
 	
+	private static void imprimirTabla (ArrayList<Router> tabla) {
+		
+		for (int i = 0; i < tabla.size(); i++) {
+			
+			System.out.println(tabla.get(i).toString());
+			
+		}
+		
+	}
+	
+	private static void añadirTabla (ArrayList<Router> tabla, Router routerNuevo) {
+		
+		for (int i = 0; i < tabla.size(); i++) {
+			
+			if (tabla.get(i).getIp().equalsIgnoreCase(routerNuevo.getIp())) {
+				
+				if (tabla.get(i).getDistancia() > routerNuevo.getDistancia()) {
+					
+					tabla.set(i, routerNuevo);
+					
+				}
+				
+			}
+			
+		}
+		
+	}
 	
 }
