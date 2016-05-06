@@ -221,6 +221,8 @@ public class RIP {
         datagramSocket.send(packet);
         System.out.println("Paquete enviado a "+IpRemota+ " Yo Envie : "+ PacketEnvio.obtenerPaquete()+" De longitud "+PacketEnvio.obtenerPaquete().length);
         System.out.print("\n"+PacketEnvio.toString());
+        
+        datagramSocket.close();
 		
         
 	}
@@ -254,7 +256,7 @@ public class RIP {
 				ripSocket.receive(ds);										//Recibimos el paquete RIP
 	
 				Date currentDate = new Date();
-				long elapsedTime = currentDate.getTime() - initialDate.getTime();  //Estelas' Code
+				long elapsedTime = currentDate.getTime() - initialDate.getTime();
 				ripSocket.setSoTimeout(socketTimeout - (int)elapsedTime);
 				
 				PaqueteRIP Recibido= new PaqueteRIP(recData);    //		Instanciamos el paquete Recibido
@@ -262,11 +264,11 @@ public class RIP {
 				
 				System.out.println("\nPaquete recibido\n \n"+new PaqueteRIP(recData).toString());
 					
-				if (!Recibido.getIp().equalsIgnoreCase(ip)) {
+				/*if (!Recibido.getIp().equalsIgnoreCase(ip)) {
 					
 					reenviarPaquete(Recibido);
 					
-				}
+				}*/
 				
 				Router routerNuevo = new Router(Recibido.getIp(),Recibido.getMetrica());
 				
@@ -315,8 +317,6 @@ public class RIP {
 	
 	private static void reenviarPaquete (PaqueteRIP paquete) {
 		
-		paquete.aumentarMetrica();
-		
 		try {
 			
 			InetAddress address = InetAddress.getByName(paquete.getIp());
@@ -326,6 +326,8 @@ public class RIP {
 	        datagramSocket.send(packet);
 	        System.out.println("Paquete enviado a "+paquete.getIp()+ " Yo Envie : "+ paquete.obtenerPaquete()+" De longitud "+paquete.obtenerPaquete().length);
 	        System.out.print("\n"+paquete.toString());
+	        
+	        datagramSocket.close();
 	        
 		} catch (Exception ex) {
 			
