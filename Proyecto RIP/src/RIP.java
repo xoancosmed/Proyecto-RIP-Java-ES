@@ -210,13 +210,16 @@ public class RIP {
 	}
 	
 	
-	private static void EnviarPaquete(String IpRemota, int puerto) throws IOException{
+	private static void EnviarPaquete(String IpRemota, int puertoDestino) throws IOException{
 
 		
 		PaqueteRIP PacketEnvio = new PaqueteRIP(1,1,IpRemota,0); //Creamos el paquete para enviar
 		InetAddress address = InetAddress.getByName(IpRemota);
-		DatagramPacket packet = new DatagramPacket(PacketEnvio.obtenerPaquete(),PacketEnvio.obtenerPaquete().length,address,puerto);
-		DatagramSocket datagramSocket = new DatagramSocket();
+		DatagramPacket packet = new DatagramPacket(PacketEnvio.obtenerPaquete(),PacketEnvio.obtenerPaquete().length,address,puertoDestino);
+		
+		
+		InetAddress ipLocal = InetAddress.getByName(ip);
+		DatagramSocket datagramSocket = new DatagramSocket(puerto,ipLocal);
 		
         datagramSocket.send(packet);
         System.out.println("Paquete enviado a "+IpRemota+ " Yo Envie : "+ PacketEnvio.obtenerPaquete()+" De longitud "+PacketEnvio.obtenerPaquete().length);
