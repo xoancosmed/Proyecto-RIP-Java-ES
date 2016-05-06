@@ -52,6 +52,17 @@ public class Paquete {
 		
 	}
 	
+	public byte[] obtener() {
+		
+		byte[] paqueteBytes = new byte[paquete.size()];
+		
+		for (int i = 0; i < paquete.size(); i++)
+			paqueteBytes[i] = paquete.get(i);
+		
+		return paqueteBytes;
+		
+	}
+	
 	public class RIPv2 {
 		
 		private String ip;
