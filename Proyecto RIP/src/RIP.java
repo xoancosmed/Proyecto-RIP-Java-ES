@@ -130,6 +130,7 @@ public class RIP {
 			EstablecerConexion(routers,ip,puerto);
 		} catch (IOException e) {
 			System.out.println("Errores en EnviarPAquete");
+			e.printStackTrace();
 			
 			
 		}
@@ -242,12 +243,10 @@ public class RIP {
 			
 			imprimirTabla(tabla);
 			
-			if(contador==0){
-				for(int i=0;i<routers.size();i++){
+			for(int i=0;i<routers.size();i++){
 			
-					EnviarPaquete(((Router)routers.get(i)).getIp());  //Enviamos el primer paquete a todos los vecinos
+				EnviarPaquete(((Router)routers.get(i)).getIp());  //Enviamos el primer paquete a todos los vecinos
 			
-				}
 			}
 			
 			for(int i = 0; i<reenvios.size();i++){
@@ -269,15 +268,11 @@ public class RIP {
 				Recibido.aumentarMetrica();						//		Aumentamos en 1 su metrica
 				
 				System.out.println("\nPaquete recibido\n \n"+new PaqueteRIP(recData).toString());
-				
-				if(!Recibido.getIp().equals(ip)){						//		¿Es nuestro?
-					reenvios.add(Recibido);								//		En caso negativo lo añadimos a una lista de reenvios
-					continue;
-				}														//
+																		//
 				
 				Router routerNuevo = new Router(Recibido.getIp(),Recibido.getMetrica());
 				
-				 añadirTabla(tabla,routerNuevo); // En caso negativo añadimos un nuevo vecino a la tabla		
+				añadirTabla(tabla,routerNuevo); // En caso negativo añadimos un nuevo vecino a la tabla		
 			
 			} catch (SocketTimeoutException e) {
 				
@@ -312,6 +307,28 @@ public class RIP {
 				}
 				
 			}
+			
+		}
+		
+	}
+	
+	private static void reenviarPaquete (PaqueteRIP paquete) {
+		
+		paquete.aumentarMetrica();
+		
+		try {
+			
+			InetAddress address = InetAddress.getByName(paquete.getIp());
+			DatagramPacket packet = new DatagramPacket(paquete.obtenerPaquete(),paquete.obtenerPaquete().length,address,5512);
+			DatagramSocket datagramSocket = new DatagramSocket();
+			
+	        datagramSocket.send(packet);
+	        System.out.println("Paquete enviado a "+paquete.getIp()+ " Yo Envie : "+ paquete.obtenerPaquete()+" De longitud "+paquete.obtenerPaquete().length);
+	        System.out.print("\n"+paquete.toString());
+	        
+		} catch (Exception ex) {
+			
+			ex.printStackTrace();
 			
 		}
 		
