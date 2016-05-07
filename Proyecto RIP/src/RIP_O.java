@@ -13,7 +13,7 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.Scanner;
 
-public class RIP {
+public class RIP_O {
 	
 	private static String ip = null;
 	private static int puerto = 0;
