@@ -15,7 +15,7 @@ public class Paquete {
 	
 	private ArrayList<Byte> paquete;
 	private int numEntradas = 0;
-	private boolean password = false;
+	private boolean hasPassword = false;
 	
 	// CONSTRUCTOR
 	
@@ -25,28 +25,49 @@ public class Paquete {
 		
 	}
 	
+	public Paquete (String password) {
+		
+		this.hasPassword = true;
+		
+		añadirCabecera();
+		añadirCifrado (password);
+		
+	}
+	
 	// MÉTODOS
 	
 	private void añadirCabecera () {
 		
 		paquete = new ArrayList<Byte>();
 		
-		paquete.add(BigInteger.valueOf(0x2).toByteArray()[0]); // Comando
+		paquete.add(BigInteger.valueOf(0x02).toByteArray()[0]); // Comando
 		
-		paquete.add(BigInteger.valueOf(0x2).toByteArray()[0]); // Version
+		paquete.add(BigInteger.valueOf(0x02).toByteArray()[0]); // Version
 		
 		paquete.add((byte) 0x0);
 		paquete.add((byte) 0x0);
 		
 	}
 	
+	private void añadirCifrado (String password) {
+		
+		paquete.add(BigInteger.valueOf(0xFF).toByteArray()[0]);
+		paquete.add(BigInteger.valueOf(0xFF).toByteArray()[0]);
+		
+		paquete.add(BigInteger.valueOf(0x00).toByteArray()[0]); // Tipo autentificación
+		paquete.add(BigInteger.valueOf(0x02).toByteArray()[0]);
+		
+		// TODO PONER CONTRASEÑA
+		
+	}
+	
 	public int añadirEntrada (RIPv2 entrada) {
 		
-		if ((password == false) && (numEntradas >= 25)) {
+		if ((hasPassword == false) && (numEntradas >= 25)) {
 			
 			return -1; // Ya no entran más
 			
-		} else if ((password == true) && (numEntradas >= 24)) {
+		} else if ((hasPassword == true) && (numEntradas >= 24)) {
 			
 			return -1; // Ya no entran más
 			
@@ -69,6 +90,7 @@ public class Paquete {
 		return paqueteBytes;
 		
 	}
+	
 	
 	/* *************** */
 	/* **** RIPv2 **** */

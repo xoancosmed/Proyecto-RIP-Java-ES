@@ -21,14 +21,14 @@ public class RIP_O {
 	
 	public static void main (String[] args) throws UnknownHostException, InterruptedException {
 		
-		// OBTENEMOS LA IP Y PUERTO DE LOS PARÃ�METROS DE ENTRADA
+		// OBTENEMOS LA IP Y PUERTO DE LOS PARÁMETROS DE ENTRADA
 		
 		ArrayList<Router> Tabla = new ArrayList<Router>();
 		
 		ip = "";
 		puerto = 0;
 		
-		if (args.length == 1) { // Si recibimos un parÃ¡metro ...
+		if (args.length == 1) { // Si recibimos un parámetro ...
 			
 			String ipYpuerto = args[0];
 			
@@ -44,14 +44,14 @@ public class RIP_O {
 					System.exit(-1);
 				}
 				
-			} else { // ... sino, el parÃ¡metro es sÃ³lo la IP
+			} else { // ... sino, el parámetro es sólo la IP
 				
 				ip = ipYpuerto;
 				puerto = 5512;
 				
 			}
 			
-		} else if (args.length == 0) { // Si no recibimos ningÃºn parÃ¡metro ...
+		} else if (args.length == 0) { // Si no recibimos ningún parámetro ...
 			
 			puerto = 5512; // ... se usan los valores por defecto
 			
@@ -84,7 +84,7 @@ public class RIP_O {
 				
 			}
 			
-		} else { // Si no es ninguno de esos casos, el nÃºmero de parÃ¡metros es incorrecto
+		} else { // Si no es ninguno de esos casos, el número de parámetros es incorrecto
 			
 			System.out.println("NÃºmero de parÃ¡metros incorrecto");
 			System.exit(-1);
@@ -131,7 +131,6 @@ public class RIP_O {
 		try {
 			datagramSocket = new DatagramSocket(puerto,InetAddress.getByName(ip));
 		} catch (SocketException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		
@@ -261,7 +260,7 @@ public class RIP_O {
 			try {
 				
 				ripSocket.receive(ds);										//Recibimos el paquete RIP
-	
+				
 				Date currentDate = new Date();
 				long elapsedTime = currentDate.getTime() - initialDate.getTime();
 				ripSocket.setSoTimeout(socketTimeout - (int)elapsedTime);
