@@ -1,6 +1,7 @@
 import java.math.BigInteger;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -120,8 +121,7 @@ public class Paquete {
 			mascaraBytes[1] = paquete[17];
 			mascaraBytes[2] = paquete[18];
 			mascaraBytes[3] = paquete[19];
-			
-			// FALTA OBTENER COSTE !!!!!!!!!!!
+			coste = convertirCoste(costeBytes);
 			
 		}
 		
@@ -146,8 +146,7 @@ public class Paquete {
 			mascaraBytes[1] = paquete[17];
 			mascaraBytes[2] = paquete[18];
 			mascaraBytes[3] = paquete[19];
-			
-			// FALTA OBTENER COSTE !!!!!!!!!!!
+			coste = convertirCoste(costeBytes);
 			
 		}
 		
@@ -179,15 +178,11 @@ public class Paquete {
 			paquete[14] = (byte) 0x0;
 			paquete[15] = (byte) 0x0;
 			
-			byte[] costeBytes = BigInteger.valueOf(coste).toByteArray();
-			if (costeBytes.length >= 4) paquete[16] = costeBytes[3];
-			else paquete[16] = (byte) 0x0;
-			if (costeBytes.length >= 3) paquete[17] = costeBytes[2];
-			else paquete[17] = (byte) 0x0;
-			if (costeBytes.length >= 2) paquete[18] = costeBytes[1];
-			else paquete[18] = (byte) 0x0;
-			if (costeBytes.length >= 1) paquete[19] = costeBytes[0];
-			else paquete[19] = (byte) 0x0;
+			byte[] costeBytes = convertirCoste(coste);
+			paquete[16] = costeBytes[0];
+			paquete[16] = costeBytes[1];
+			paquete[16] = costeBytes[2];
+			paquete[16] = costeBytes[3];
 			
 			return paquete;
 			
@@ -241,6 +236,18 @@ public class Paquete {
 		private String convertirMascara (byte[] mascaraBytes) {
 			
 			return convertirIp (mascaraBytes);
+			
+		}
+		
+		private byte[] convertirCoste (int coste) {
+			
+			return ByteBuffer.allocate(4).putInt(coste).array();
+			
+		}
+		
+		private int convertirCoste (byte[] costeBytes) {
+			
+			return ByteBuffer.wrap(costeBytes).getInt();
 			
 		}
 		
