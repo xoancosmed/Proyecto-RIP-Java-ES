@@ -1,5 +1,7 @@
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
+import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -14,6 +16,8 @@ public class Rip {
 	private static String ip = "";
 	private static int puerto = 0;
 	private static DatagramSocket datagramSocket = null;
+	
+	private static Tabla tabla;
 	
 	/* **************** */
 	/* ***** MAIN ***** */
@@ -39,12 +43,23 @@ public class Rip {
 		// ABRIMOS EL SOCKET
 		
 		try {
+			
 			datagramSocket = new DatagramSocket(puerto,InetAddress.getByName(ip));
+			
 		} catch (SocketException | UnknownHostException e1) {
+			
+			System.out.println("Error al abrir el socket.");
 			e1.printStackTrace();
+			
 		}
 		
+		
+		// INICIAMOS LA TABLA
+		
+		tabla = new Tabla();
+		
 	}
+	
 	
 	/* ******************************* */
 	/* ***** Obtener IP y Puerto ***** */
@@ -64,7 +79,7 @@ public class Rip {
 				try {
 					puerto = Integer.parseInt(argsSeparados[1]);
 				} catch (NumberFormatException ex) {
-					System.out.println("ParÃ¡metro de entrada incorrecto");
+					System.out.println("Parámetro de entrada incorrecto");
 					System.exit(-1);
 				}
 				
@@ -94,7 +109,6 @@ public class Rip {
 					if (posibleIPb.length == 4 && posibleIPb[0] != 127) {
 						
 						ip = posibleIP.getCanonicalHostName();  // Obtenemos la IP
-						// ip = posibleIP.getCanonicalHostName();
 						
 						break;
 					}
@@ -110,7 +124,7 @@ public class Rip {
 			
 		} else { // Si no es ninguno de esos casos, el número de parámetros es incorrecto
 			
-			System.out.println("NÃºmero de parÃ¡metros incorrecto");
+			System.out.println("Número de parámetros incorrecto");
 			System.exit(-1);
 			
 		}
@@ -197,6 +211,42 @@ public class Rip {
 			}
 			
 		}
+		
+	}
+	
+	/* ************************** */
+	/* ***** Enviar Paquete ***** */
+	/* ************************** */
+	
+	private static boolean enviarPaquete (String ipDestino, int puertoDestino, Paquete paquete) {
+		
+		DatagramPacket dataPack = null;
+		
+		try {
+			
+			dataPack = new DatagramPacket(paquete.obtenerPaquete(), paquete.obtenerPaquete().length, InetAddress.getByName(ipDestino),puertoDestino);
+		
+		} catch (UnknownHostException e) {
+			
+			System.out.println("Error al crear el datagrama.");
+			e.printStackTrace();
+			return false;
+			
+		}
+		
+		try {
+			
+			datagramSocket.send(dataPack);
+			
+		} catch (IOException e) {
+			
+			System.out.println("Error al enviar el datagrama.");
+			e.printStackTrace();
+			return false;
+			
+		}
+		
+		return true;
 		
 	}
 	
