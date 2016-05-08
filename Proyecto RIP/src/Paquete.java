@@ -14,7 +14,13 @@ public class Paquete {
 	// ATRIBUTOS
 	
 	private ArrayList<Byte> paquete;
+	
+	private ArrayList<RIPv2> entradasRIPv2;
 	private int numEntradas = 0;
+	
+	private int comando = 0x02;
+	private int version = 0x02;
+	private String password = "";
 	private boolean hasPassword = false;
 	
 	// CONSTRUCTOR
@@ -27,10 +33,11 @@ public class Paquete {
 	
 	public Paquete (String password) {
 		
+		this.password = password;
 		this.hasPassword = true;
 		
 		añadirCabecera();
-		añadirCifrado (password);
+		añadirCifrado();
 		
 	}
 	
@@ -40,16 +47,16 @@ public class Paquete {
 		
 		paquete = new ArrayList<Byte>();
 		
-		paquete.add(BigInteger.valueOf(0x02).toByteArray()[0]); // Comando
+		paquete.add(BigInteger.valueOf(comando).toByteArray()[0]); // Comando
 		
-		paquete.add(BigInteger.valueOf(0x02).toByteArray()[0]); // Version
+		paquete.add(BigInteger.valueOf(version).toByteArray()[0]); // Version
 		
 		paquete.add((byte) 0x0);
 		paquete.add((byte) 0x0);
 		
 	}
 	
-	private void añadirCifrado (String password) {
+	private void añadirCifrado () {
 		
 		paquete.add(BigInteger.valueOf(0xFF).toByteArray()[0]);
 		paquete.add(BigInteger.valueOf(0xFF).toByteArray()[0]);
@@ -57,7 +64,12 @@ public class Paquete {
 		paquete.add(BigInteger.valueOf(0x00).toByteArray()[0]); // Tipo autentificación
 		paquete.add(BigInteger.valueOf(0x02).toByteArray()[0]);
 		
-		// TODO PONER CONTRASEÑA
+		// TODO PONER CONTRASEÑA VVVVVV
+		
+		for (int i = 0; i < 16; i++)
+			paquete.add((byte) 0);
+		
+		// XXXX PONER CONTRASEÑA ^^^^^
 		
 	}
 	
@@ -74,6 +86,8 @@ public class Paquete {
 		}
 		
 		paquete.addAll(Arrays.asList(entrada.obtener())); // Añadimos la entrada
+		
+		entradasRIPv2.add(entrada);
 		numEntradas++;
 		
 		return 0;
@@ -91,12 +105,39 @@ public class Paquete {
 		
 	}
 	
+	public static RIPv2[] obtenerEntradas (byte[] paqueteBytes) {
+		
+		ArrayList<RIPv2> paquetesRIPv2 = new ArrayList<RIPv2>();
+		
+		int i;
+		
+		if ((paqueteBytes[4] == 0xFF) && (paqueteBytes[5] == 0xFF)) {
+			
+			i = 24;
+			
+		} else i = 4;
+		
+		while (i < paqueteBytes.length) {
+			
+			byte[] paqueteRIPv2 = new byte[19];
+			
+			for (int j = 0; j < 19; j++)
+				paqueteRIPv2[j] = paqueteBytes[i++];
+			
+			paquetesRIPv2.add(new RIPv2(paqueteRIPv2));
+			
+		}
+		
+		return (RIPv2[]) paquetesRIPv2.toArray();
+		
+	}
+			
 	
 	/* *************** */
 	/* **** RIPv2 **** */
 	/* *************** */
 	
-	public class RIPv2 {
+	public static class RIPv2 {
 		
 		// ATRIBUTOS
 		
