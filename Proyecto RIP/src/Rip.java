@@ -60,6 +60,43 @@ public class Rip {
 		
 		tabla = new Tabla();
 		
+		
+		// ENVÍO INICIAL
+		
+		Paquete paquete = new Paquete();
+		Paquete.RIPv2 paqueteRIP;
+		
+		paquete.añadirEntrada(new Paquete.RIPv2(ip, 32, 0));
+		
+		for (int i = 0; i < nets.size(); i++) {
+			
+			paqueteRIP = new Paquete.RIPv2(nets.get(i).getIp(), nets.get(i).getLongitud(), 1);
+			
+			if (!paquete.añadirEntrada(paqueteRIP)) {
+				
+				for (int j = 0; j < routers.size(); j++) {
+					
+					enviarPaquete(routers.get(j).getIp(), routers.get(j).getPuerto(), paquete);
+					
+				}
+				
+				paquete = new Paquete();
+				paquete.añadirEntrada(paqueteRIP);
+				
+			}
+			
+		}
+		
+		for (int j = 0; j < routers.size(); j++) {
+			
+			enviarPaquete(routers.get(j).getIp(), routers.get(j).getPuerto(), paquete);
+			
+		}
+		
+		// INICIAMOS EL BUCLE
+		
+		iniciarBucle();
+		
 	}
 	
 	
@@ -275,7 +312,7 @@ public class Rip {
 			
 			// TODO ENVIAR PAQUETE vvvvv
 			
-			// XXXX ENVIAR PAQUETE ^^^^
+			// XXXX ENVIAR PAQUETE ^^^^^
 			
 			// RECIBIR PAQUETE
 			
@@ -287,19 +324,51 @@ public class Rip {
 				long elapsedTime = currentDate.getTime() - initialDate.getTime();
 				datagramSocket.setSoTimeout(socketTimeout - (int)elapsedTime);
 				
-				Paquete.RIPv2 ripRecibido = new Paquete.RIPv2(recData);
+				// Si el paquete es para mi lo leo
 				
-				// TODO INTERPRETAR PAQUETE	
+				if (datagramPacket.getAddress().getHostAddress().equalsIgnoreCase(ip) && (datagramPacket.getPort() == puerto)) {
+					
+					Paquete.RIPv2[] ripRecibido = Paquete.obtenerEntradas(recData);
+					
+					for (int k = 0; k < ripRecibido.length; k++) {
+						
+						tabla.añadirElemento(
+								ripRecibido[k].getIp(), // Subred
+								ripRecibido[k].getMascara(), // Máscara
+								1, // G
+								"FALTA", // Vecino
+								ripRecibido[k].getCoste()); // Coste
+						
+					}
+				
+					// TODO TERMINAR INTERPRETAR PAQUETE
+					// TODO REENVIAR PAQUETE ?
+					
+				}
 			
-			} catch (IOException e) {
+			} catch (SocketTimeoutException ex) {
 				
 				socketTimeout = 10000;
 				initialDate = new Date();
 				try {
 					datagramSocket.setSoTimeout(socketTimeout);
-				} catch (SocketException e1) {
-					e1.printStackTrace();
+				} catch (SocketException e) {
+					e.printStackTrace();
 				}
+				continue;
+				
+			} catch (IOException ex) {
+				
+				ex.printStackTrace();
+				
+				socketTimeout = 10000;
+				initialDate = new Date();
+				try {
+					datagramSocket.setSoTimeout(socketTimeout);
+				} catch (SocketException e) {
+					e.printStackTrace();
+				}
+				
 				continue;
 				
 			}

@@ -5,7 +5,7 @@ public class Router {
 	
 	private String ip;
 	private int puerto;
-	private int distancia;
+	private int distancia; // TODO BORRAR ?
 	
 	
 	// CONSTRUCTORES

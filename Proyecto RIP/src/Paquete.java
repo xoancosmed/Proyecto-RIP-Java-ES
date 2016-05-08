@@ -73,15 +73,15 @@ public class Paquete {
 		
 	}
 	
-	public int añadirEntrada (RIPv2 entrada) {
+	public boolean añadirEntrada (RIPv2 entrada) {
 		
 		if ((hasPassword == false) && (numEntradas >= 25)) {
 			
-			return -1; // Ya no entran más
+			return false; // Ya no entran más
 			
 		} else if ((hasPassword == true) && (numEntradas >= 24)) {
 			
-			return -1; // Ya no entran más
+			return false; // Ya no entran más
 			
 		}
 		
@@ -90,7 +90,7 @@ public class Paquete {
 		entradasRIPv2.add(entrada);
 		numEntradas++;
 		
-		return 0;
+		return true;
 		
 	}
 	
