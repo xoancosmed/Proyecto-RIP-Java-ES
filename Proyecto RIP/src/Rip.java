@@ -287,6 +287,8 @@ public class Rip {
 				long elapsedTime = currentDate.getTime() - initialDate.getTime();
 				datagramSocket.setSoTimeout(socketTimeout - (int)elapsedTime);
 				
+				Paquete.RIPv2 ripRecibido = new Paquete.RIPv2(recData);
+				
 				// TODO INTERPRETAR PAQUETE	
 			
 			} catch (IOException e) {
