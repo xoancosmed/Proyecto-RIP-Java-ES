@@ -61,6 +61,9 @@ public class Rip {
 		tabla = new Tabla();
 		
 		
+		// AÑADIR A LA TABLA LOS ROUTER VECINOS Y REDES ? (TODO)
+		
+		
 		// ENVÍO INICIAL
 		
 		Paquete paquete = new Paquete();
