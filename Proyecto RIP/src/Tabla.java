@@ -61,6 +61,18 @@ public class Tabla {
 		
 	}
 	
+	public Iterator<String> obtenerInterator () {
+		
+		return tabla.keySet().iterator();
+		
+	}
+	
+	public TreeMap<String,ElementoTabla> obtenerTabla () {
+		
+		return tabla;
+		
+	}
+	
 	public void imprimirTabla() {
 		
 		System.out.println("SUBRED ----- MASCARA ----- G ----- Vecino ----- Coste");

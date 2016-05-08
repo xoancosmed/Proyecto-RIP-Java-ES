@@ -11,13 +11,18 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.Scanner;
 
 public class Rip {
 
 	private static String ip = "";
 	private static int puerto = 0;
+	
 	private static DatagramSocket datagramSocket = null;
+	
+	private static ArrayList<Router> routers;
+	private static ArrayList<Net> nets;
 	
 	private static Tabla tabla;
 	
@@ -75,22 +80,22 @@ public class Rip {
 			
 			paqueteRIP = new Paquete.RIPv2(nets.get(i).getIp(), nets.get(i).getLongitud(), 1);
 			
-			if (!paquete.añadirEntrada(paqueteRIP)) {
+			if (!paquete.añadirEntrada(paqueteRIP)) { // Si no entran más paquetes ...
 				
-				for (int j = 0; j < routers.size(); j++) {
+				for (int j = 0; j < routers.size(); j++) { // ... enviamos el actual ...
 					
 					enviarPaquete(routers.get(j).getIp(), routers.get(j).getPuerto(), paquete);
 					
 				}
 				
-				paquete = new Paquete();
+				paquete = new Paquete(); // ... y creamos uno nuevo.
 				paquete.añadirEntrada(paqueteRIP);
 				
 			}
 			
 		}
 		
-		for (int j = 0; j < routers.size(); j++) {
+		for (int j = 0; j < routers.size(); j++) { // Enviamos el paquete
 			
 			enviarPaquete(routers.get(j).getIp(), routers.get(j).getPuerto(), paquete);
 			
@@ -313,9 +318,44 @@ public class Rip {
 			
 			tabla.imprimirTabla();
 			
-			// TODO ENVIAR PAQUETE vvvvv
+			// ENVIAR PAQUETE
 			
-			// XXXX ENVIAR PAQUETE ^^^^^
+			Paquete paquete = new Paquete();
+			Paquete.RIPv2 paqueteRIP;
+			
+			paquete.añadirEntrada(new Paquete.RIPv2(ip, 32, 0));
+			
+			Iterator<String> it = tabla.obtenerInterator();
+			
+			while (it.hasNext()) {
+				
+				String subred = it.next();
+				
+				paqueteRIP = new Paquete.RIPv2(
+						tabla.obtenerElemento(subred).getSubred(), 
+						tabla.obtenerElemento(subred).getMascara(), 
+						tabla.obtenerElemento(subred).getCoste() + 1);
+				
+				if (!paquete.añadirEntrada(paqueteRIP)) {
+					
+					for (int j = 0; j < routers.size(); j++) {
+						
+						enviarPaquete(routers.get(j).getIp(), routers.get(j).getPuerto(), paquete);
+						
+					}
+					
+					paquete = new Paquete();
+					paquete.añadirEntrada(paqueteRIP);
+					
+				}
+				
+			}
+			
+			for (int j = 0; j < routers.size(); j++) {
+				
+				enviarPaquete(routers.get(j).getIp(), routers.get(j).getPuerto(), paquete);
+				
+			}
 			
 			// RECIBIR PAQUETE
 			
@@ -328,7 +368,8 @@ public class Rip {
 				datagramSocket.setSoTimeout(socketTimeout - (int)elapsedTime);
 				
 				// Si el paquete es para mi lo leo
-				
+				// Y añado las entradas RIP a mi tabla de encaminamiento
+				// TODO Revisar el "if". Obtener el vecino.
 				if (datagramPacket.getAddress().getHostAddress().equalsIgnoreCase(ip) && (datagramPacket.getPort() == puerto)) {
 					
 					Paquete.RIPv2[] ripRecibido = Paquete.obtenerEntradas(recData);
@@ -343,9 +384,6 @@ public class Rip {
 								ripRecibido[k].getCoste()); // Coste
 						
 					}
-				
-					// TODO TERMINAR INTERPRETAR PAQUETE
-					// TODO REENVIAR PAQUETE ?
 					
 				}
 			
