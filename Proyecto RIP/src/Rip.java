@@ -6,8 +6,10 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.Scanner;
 
@@ -247,6 +249,60 @@ public class Rip {
 		}
 		
 		return true;
+		
+	}
+	
+	/* ************************* */
+	/* ***** Iniciar Bucle ***** */
+	/* ************************* */
+	
+	private static void iniciarBucle () {
+		
+		int socketTimeout = 10000;
+		Date initialDate = new Date();
+		try {
+			datagramSocket.setSoTimeout(socketTimeout);
+		} catch (SocketException e) {
+			e.printStackTrace();
+		}
+		
+		byte[] recData = new byte[1024]; // 512 ??
+		DatagramPacket datagramPacket = new DatagramPacket(recData, 1024);
+		
+		while (true) {
+			
+			tabla.imprimirTabla();
+			
+			// TODO ENVIAR PAQUETE vvvvv
+			
+			// XXXX ENVIAR PAQUETE ^^^^
+			
+			// RECIBIR PAQUETE
+			
+			try {
+				
+				datagramSocket.receive(datagramPacket);										//Recibimos el paquete RIP
+				
+				Date currentDate = new Date();
+				long elapsedTime = currentDate.getTime() - initialDate.getTime();
+				datagramSocket.setSoTimeout(socketTimeout - (int)elapsedTime);
+				
+				// TODO INTERPRETAR PAQUETE	
+			
+			} catch (IOException e) {
+				
+				socketTimeout = 10000;
+				initialDate = new Date();
+				try {
+					datagramSocket.setSoTimeout(socketTimeout);
+				} catch (SocketException e1) {
+					e1.printStackTrace();
+				}
+				continue;
+				
+			}
+ 			
+		}
 		
 	}
 	
