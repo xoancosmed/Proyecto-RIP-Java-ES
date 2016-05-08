@@ -41,8 +41,8 @@ public class Rip {
 		
 		File archivo = new File(System.getProperty("user.dir"),"ripconf-"+ip+".topo");
 		
-		ArrayList<Router> routers = new ArrayList<Router>();
-		ArrayList<Net> nets = new ArrayList<Net>();
+		routers = new ArrayList<Router>();
+		nets = new ArrayList<Net>();
 	
 		leerArchivo(archivo,routers,nets);
 		
