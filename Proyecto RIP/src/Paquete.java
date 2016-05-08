@@ -2,6 +2,7 @@ import java.math.BigInteger;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -64,12 +65,25 @@ public class Paquete {
 		paquete.add(BigInteger.valueOf(0x00).toByteArray()[0]); // Tipo autentificación
 		paquete.add(BigInteger.valueOf(0x02).toByteArray()[0]);
 		
-		// TODO PONER CONTRASEÑA VVVVVV
+		// Introduciomos la contraseña (y rellenamos con 0)
 		
-		for (int i = 0; i < 16; i++)
-			paquete.add((byte) 0);
+		byte[] passwordBytes = password.getBytes(Charset.forName("UTF-8"));
 		
-		// XXXX PONER CONTRASEÑA ^^^^^
+		for (int i = 0, j = 0; i < 16; i++) {
+			
+			if (j >= passwordBytes.length) {
+				
+				paquete.add((byte) 0);
+				
+			}
+			else {
+				
+				paquete.add(passwordBytes[j]);
+				j++;
+				
+			}
+			
+		}
 		
 	}
 	
