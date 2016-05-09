@@ -367,23 +367,19 @@ public class Rip {
 				long elapsedTime = currentDate.getTime() - initialDate.getTime();
 				datagramSocket.setSoTimeout(socketTimeout - (int)elapsedTime);
 				
-				// Si el paquete es para mi lo leo
-				// Y añado las entradas RIP a mi tabla de encaminamiento
-				// TODO Revisar el "if". Obtener el vecino.
-				if (datagramPacket.getAddress().getHostAddress().equalsIgnoreCase(ip) && (datagramPacket.getPort() == puerto)) {
+				Paquete.RIPv2[] ripRecibido = Paquete.obtenerEntradas(recData);
+				
+				// TODO PROCESAR PAQUETE (revisar)
+				
+				for (int k = 0; k < ripRecibido.length; k++) {
 					
-					Paquete.RIPv2[] ripRecibido = Paquete.obtenerEntradas(recData);
+					String subred = ripRecibido[k].getIp();
+					String mascara = ripRecibido[k].getMascara();
+					Router vecino = new Router(datagramPacket.getAddress().getHostAddress(), datagramPacket.getPort());
+					int coste = ripRecibido[k].getCoste();
+					int g = obtenerG(subred,vecino,coste);
 					
-					for (int k = 0; k < ripRecibido.length; k++) {
-						
-						tabla.añadirElemento(
-								ripRecibido[k].getIp(), // Subred
-								ripRecibido[k].getMascara(), // Máscara
-								1, // G
-								"FALTA", // Vecino
-								ripRecibido[k].getCoste()); // Coste
-						
-					}
+					tabla.añadirElemento(subred, mascara, g, vecino, coste);
 					
 				}
 			
@@ -415,6 +411,20 @@ public class Rip {
 			}
  			
 		}
+		
+	}
+	
+	/* ********************* */
+	/* ***** Obtener G ***** */
+	/* ********************* */
+	
+	private static int obtenerG (String subred, Router vecino, int coste) {
+		
+		if (coste < 2) return 0;
+		
+		if (subred.equalsIgnoreCase(vecino.getIp())) return 0;
+		
+		return 1;
 		
 	}
 	

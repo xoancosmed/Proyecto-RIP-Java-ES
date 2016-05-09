@@ -38,7 +38,7 @@ public class Tabla {
 		
 	}
 	
-	public void añadirElemento (String subred, String mascara, int g, String vecino, int coste) {
+	public void añadirElemento (String subred, String mascara, int g, Router vecino, int coste) {
 		
 		if (tabla.get(subred) == null) {
 			
@@ -55,7 +55,7 @@ public class Tabla {
 		
 	}
 	
-	public void añadirElemento (String subred, int longitud, int g, String vecino, int coste) {
+	public void añadirElemento (String subred, int longitud, int g, Router vecino, int coste) {
 		
 		añadirElemento (subred, convertirLongitudAMascara(longitud), g, vecino, coste);
 		
@@ -110,7 +110,7 @@ public class Tabla {
 		private String subred;
 		private String mascara;
 		private int g;
-		private String vecino;
+		private Router vecino;
 		private int coste;
 		
 		// CONSTRUCTORES
@@ -119,7 +119,7 @@ public class Tabla {
 			
 		}
 		
-		public ElementoTabla (String subred, String mascara, int g, String vecino, int coste) {
+		public ElementoTabla (String subred, String mascara, int g, Router vecino, int coste) {
 			
 			this.subred = subred;
 			this.mascara = mascara;
@@ -141,7 +141,7 @@ public class Tabla {
 			string += "-";
 			string += Integer.toString(g);
 			string += "-";
-			string += vecino;
+			string += vecino.toString();
 			string += "-";
 			string += Integer.toString(coste);
 			
@@ -175,11 +175,11 @@ public class Tabla {
 			this.g = g;
 		}
 
-		public String getVecino() {
+		public Router getVecino() {
 			return vecino;
 		}
 
-		public void setVecino(String vecino) {
+		public void setVecino(Router vecino) {
 			this.vecino = vecino;
 		}
 
