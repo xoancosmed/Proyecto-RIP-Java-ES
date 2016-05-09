@@ -57,20 +57,7 @@ public class Tabla {
 	
 	public void añadirElemento (String subred, int longitud, int g, String vecino, int coste) {
 		
-		String mascara = convertirLongitudAMascara(longitud);
-		
-		if (tabla.get(subred) == null) {
-			
-			tabla.put(subred, new ElementoTabla(subred, mascara, g, vecino, coste));
-			
-		} else if (tabla.get(subred).getCoste() > coste) {
-			
-			tabla.get(subred).setMascara(mascara);
-			tabla.get(subred).setG(g);
-			tabla.get(subred).setVecino(vecino);
-			tabla.get(subred).setCoste(coste);
-			
-		}
+		añadirElemento (subred, convertirLongitudAMascara(longitud), g, vecino, coste);
 		
 	}
 	
