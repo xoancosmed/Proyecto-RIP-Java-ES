@@ -361,7 +361,7 @@ public class Rip {
 			
 			try {
 				
-				datagramSocket.receive(datagramPacket);										//Recibimos el paquete RIP
+				datagramSocket.receive(datagramPacket);	//Recibimos el paquete RIP
 				
 				Date currentDate = new Date();
 				long elapsedTime = currentDate.getTime() - initialDate.getTime();
@@ -423,6 +423,13 @@ public class Rip {
 		if (coste < 2) return 0;
 		
 		if (subred.equalsIgnoreCase(vecino.getIp())) return 0;
+		
+		for (int m = 0; m < routers.size(); m++) 
+			if (routers.get(m).getIp().equalsIgnoreCase(subred)) return 0;
+		
+		for (int n = 0; n < nets.size(); n++)
+			if (nets.get(n).getIp().equalsIgnoreCase(subred)) return 0;
+			
 		
 		return 1;
 		
