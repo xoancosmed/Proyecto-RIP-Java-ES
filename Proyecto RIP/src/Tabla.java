@@ -55,6 +55,34 @@ public class Tabla {
 		
 	}
 	
+	public void añadirElemento (String subred, int longitud, int g, String vecino, int coste) {
+		
+		String mascara = convertirLongitudAMascara(longitud);
+		
+		if (tabla.get(subred) == null) {
+			
+			tabla.put(subred, new ElementoTabla(subred, mascara, g, vecino, coste));
+			
+		} else if (tabla.get(subred).getCoste() > coste) {
+			
+			tabla.get(subred).setMascara(mascara);
+			tabla.get(subred).setG(g);
+			tabla.get(subred).setVecino(vecino);
+			tabla.get(subred).setCoste(coste);
+			
+		}
+		
+	}
+	
+	private String convertirLongitudAMascara (int longitud) {
+		
+		long bits = 0xffffffff ^ (1 << 32 - longitud) - 1;
+		String mascara = String.format("%d.%d.%d.%d", (bits & 0x0000000000ff000000L) >> 24, (bits & 0x0000000000ff0000) >> 16, (bits & 0x0000000000ff00) >> 8, bits & 0xff);
+
+		return mascara;
+		
+	}
+	
 	public ElementoTabla obtenerElemento (String subred) {
 		
 		return tabla.get(subred);
