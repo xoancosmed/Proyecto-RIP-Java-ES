@@ -1,6 +1,5 @@
 import java.math.BigInteger;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -146,6 +145,11 @@ public class Paquete {
 			
 		}
 		
+		RIPv2[] entradas = new RIPv2[paquetesRIPv2.size()];
+		
+		for (int k = 0; k < paquetesRIPv2.size(); k++)
+			entradas[k] = paquetesRIPv2.get(k);
+		
 		return (RIPv2[]) paquetesRIPv2.toArray();
 		
 	}
@@ -287,12 +291,14 @@ public class Paquete {
 		
 		private String convertirIp (byte[] ipBytes) {
 			
-			String ipString = null;
+			String ipString = "";
+			int i = 4;
 			
-			try {
-				ip = InetAddress.getByAddress(ipBytes).getCanonicalHostName();
-			} catch (UnknownHostException e) {
-				e.printStackTrace();
+			for (byte raw : ipBytes) {
+				
+				ipString += (raw & 0xFF);
+				if (--i > 0) ipString += ".";
+				
 			}
 			
 			return ipString;
