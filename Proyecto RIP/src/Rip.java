@@ -392,7 +392,8 @@ public class Rip {
 					int coste = ripRecibido[k].getCoste();
 					int g = obtenerG(subred,vecino,coste);
 					
-					tabla.añadirElemento(subred, mascara, g, vecino, coste);
+					if (g == 0) tabla.añadirElemento(subred, mascara, 0, new Router("",0), coste);
+					else tabla.añadirElemento(subred, mascara, 1, vecino, coste);
 					
 				}
 			
