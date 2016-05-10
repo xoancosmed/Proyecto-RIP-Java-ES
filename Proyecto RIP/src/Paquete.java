@@ -14,9 +14,9 @@ public class Paquete {
 	
 	// ATRIBUTOS
 	
-	private ArrayList<Byte> paquete;
+	private ArrayList<Byte> paquete = new ArrayList<Byte>();
 	
-	private ArrayList<RIPv2> entradasRIPv2;
+	private ArrayList<RIPv2> entradasRIPv2 = new ArrayList<RIPv2>();
 	private int numEntradas = 0;
 	
 	private int comando = 0x02;
@@ -112,9 +112,11 @@ public class Paquete {
 		
 		byte[] paqueteBytes = new byte[paquete.size()];
 		
-		for (int i = 0; i < paquete.size(); i++)
-			paqueteBytes[i] = paquete.get(i);
+		System.out.println(paquete.size());
 		
+		for (int i = 0; i < paquete.size(); i++) 
+			paqueteBytes[i] = paquete.get(i);
+
 		return paqueteBytes;
 		
 	}
@@ -231,7 +233,7 @@ public class Paquete {
 		
 		public Byte[] obtener() {
 			
-			Byte[] paquete = new Byte[25];
+			Byte[] paquete = new Byte[20];
 			
 			paquete[0] = (byte) 0x0;
 			paquete[1] = BigInteger.valueOf(2).toByteArray()[0];
@@ -257,9 +259,9 @@ public class Paquete {
 			
 			byte[] costeBytes = convertirCoste(coste);
 			paquete[16] = costeBytes[0];
-			paquete[16] = costeBytes[1];
-			paquete[16] = costeBytes[2];
-			paquete[16] = costeBytes[3];
+			paquete[17] = costeBytes[1];
+			paquete[18] = costeBytes[2];
+			paquete[19] = costeBytes[3];
 			
 			return paquete;
 			

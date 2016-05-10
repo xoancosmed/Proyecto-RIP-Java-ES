@@ -165,7 +165,7 @@ public class Rip {
 			} catch (Exception ex) {
 				
 				System.out.println("Imposible obtener la IP de la interfaz \"eth0\".");
-				System.exit(-1);
+				//System.exit(-1);
 				
 			}
 			
