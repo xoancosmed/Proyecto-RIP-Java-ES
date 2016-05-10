@@ -5,7 +5,6 @@ public class Router {
 	
 	private String ip;
 	private int puerto;
-	private int distancia; // TODO BORRAR ?
 	
 	
 	// CONSTRUCTORES
@@ -17,27 +16,16 @@ public class Router {
 		
 	}
 	
-	public Router ( int distancia,String ip) {
-		
-		this.ip = ip;
-		this.distancia = distancia;
-		
-	}
-	
 	
 	// MÉTODOS
 	
 	public String toString() {
 		
-		if (distancia == 0) {
-			return ip + ":" + puerto;
-		}
-		
 		if (puerto == 0) {
-			return ip + "\t\t" + distancia;
+			return ip;
 		}
 		
-		return ip + ":" + puerto + "\t\t" + distancia;
+		return ip + ":" + puerto + "\t\t";
 		
 	}
 	
@@ -46,14 +34,6 @@ public class Router {
 
 	public String getIp() {
 		return ip;
-	}
-	
-	public int getDistancia() {
-		return distancia;
-	}
-	
-	public void setDistancia(int distancia) {
-		this.distancia = distancia;
 	}
 
 	public void setIp(String ip) {

@@ -66,8 +66,19 @@ public class Rip {
 		tabla = new Tabla();
 		
 		
-		// AÑADIR A LA TABLA LOS ROUTER VECINOS Y REDES ? (TODO)
+		// AÑADIR A LA TABLA LOS ROUTER VECINOS Y REDES
 		
+		for (int i = 0; i < nets.size(); i++) {
+			
+			tabla.añadirElemento(nets.get(i).getIp(), nets.get(i).getLongitud(), 0, new Router("",0), 1);
+			
+		}
+		
+		for (int j = 0; j < routers.size(); j++) {
+			
+			tabla.añadirElemento(routers.get(j).getIp(), 32, 0, new Router("",0), 1);
+			
+		}
 		
 		// ENVÍO INICIAL
 		

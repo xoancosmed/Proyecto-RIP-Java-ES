@@ -135,10 +135,14 @@ public class Paquete {
 		
 		while (i < paqueteBytes.length) {
 			
-			byte[] paqueteRIPv2 = new byte[19];
+			byte[] paqueteRIPv2 = new byte[20];
 			
-			for (int j = 0; j < 19; j++)
-				paqueteRIPv2[j] = paqueteBytes[i++];
+			for (int j = 0; j < 20; j++) {
+				
+				paqueteRIPv2[j] = paqueteBytes[i];
+				i++;
+				
+			}
 			
 			paquetesRIPv2.add(new RIPv2(paqueteRIPv2));
 			
@@ -189,10 +193,10 @@ public class Paquete {
 			ip = convertirIp(ipBytes);
 			
 			byte[] mascaraBytes = new byte[4];
-			mascaraBytes[0] = paquete[4];
-			mascaraBytes[1] = paquete[5];
-			mascaraBytes[2] = paquete[6];
-			mascaraBytes[3] = paquete[7];
+			mascaraBytes[0] = paquete[8];
+			mascaraBytes[1] = paquete[9];
+			mascaraBytes[2] = paquete[10];
+			mascaraBytes[3] = paquete[11];
 			mascara = convertirMascara(mascaraBytes);
 			
 			byte[] costeBytes = new byte[4];
@@ -214,10 +218,10 @@ public class Paquete {
 			ip = convertirIp(ipBytes);
 			
 			byte[] mascaraBytes = new byte[4];
-			mascaraBytes[0] = paquete[4];
-			mascaraBytes[1] = paquete[5];
-			mascaraBytes[2] = paquete[6];
-			mascaraBytes[3] = paquete[7];
+			mascaraBytes[0] = paquete[8];
+			mascaraBytes[1] = paquete[9];
+			mascaraBytes[2] = paquete[10];
+			mascaraBytes[3] = paquete[11];
 			mascara = convertirMascara(mascaraBytes);
 			
 			byte[] costeBytes = new byte[4];
