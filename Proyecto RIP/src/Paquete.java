@@ -278,7 +278,7 @@ public class Paquete {
 			byte[] ipBytes = null;
 			
 			try {
-				ipBytes = InetAddress.getByName(ip).getAddress();
+				ipBytes = InetAddress.getByName(ipString).getAddress();
 			} catch (java.net.UnknownHostException ex) {
 				ex.printStackTrace();
 			} catch (NumberFormatException ex) {
