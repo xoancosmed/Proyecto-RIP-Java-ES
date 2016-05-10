@@ -327,16 +327,6 @@ public class Rip {
 		
 		while (true) {
 			
-			// REESTABLECEMOS EL TIMEOUT
-			
-			socketTimeout = 10000;
-			initialDate = new Date();
-			try {
-				datagramSocket.setSoTimeout(socketTimeout);
-			} catch (SocketException e) {
-				e.printStackTrace();
-			}
-			
 			// IMPRIMIR TABLA
 			
 			tabla.imprimirTabla();
