@@ -112,8 +112,6 @@ public class Paquete {
 		
 		byte[] paqueteBytes = new byte[paquete.size()];
 		
-		System.out.println(paquete.size());
-		
 		for (int i = 0; i < paquete.size(); i++) 
 			paqueteBytes[i] = paquete.get(i);
 

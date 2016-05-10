@@ -90,6 +90,7 @@ public class Tabla {
 	
 	public void imprimirTabla() {
 		
+		System.out.println("");
 		System.out.println("SUBRED ----- MASCARA ----- G ----- Vecino ----- Coste");
 		System.out.println("");
 		
