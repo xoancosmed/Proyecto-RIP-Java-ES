@@ -150,7 +150,7 @@ public class Paquete {
 		for (int k = 0; k < paquetesRIPv2.size(); k++)
 			entradas[k] = paquetesRIPv2.get(k);
 		
-		return (RIPv2[]) paquetesRIPv2.toArray();
+		return entradas;
 		
 	}
 			
