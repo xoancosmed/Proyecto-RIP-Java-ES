@@ -15,7 +15,7 @@ public class Paquete {
 	
 	private ArrayList<Byte> paquete = new ArrayList<Byte>();
 	
-	private ArrayList<RIPv2> entradasRIPv2 = new ArrayList<RIPv2>();
+	private ArrayList<RIPv2> entradasRIPv2 = new ArrayList<RIPv2>(); // TODO BORRAR
 	private int numEntradas = 0;
 	
 	private int comando = 0x02;

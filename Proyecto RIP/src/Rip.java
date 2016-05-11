@@ -315,6 +315,55 @@ public class Rip {
 	}
 	
 	/* ************************* */
+	/* ***** Split Horizon ***** */
+	/* ************************* */
+
+	private static void splitHorizon (Router router) {
+		
+		Paquete paquete = new Paquete();
+		Paquete.RIPv2 paqueteRIP;
+		
+		paquete.añadirEntrada(new Paquete.RIPv2(ip, 32, 0));
+		
+		Iterator<String> it = tabla.obtenerInterator();
+		
+		while (it.hasNext()) {
+			
+			String subred = it.next();
+			
+			if (tabla.obtenerElemento(subred).getVecino().getIp().equalsIgnoreCase(router.getIp())
+					&& (tabla.obtenerElemento(subred).getVecino().getPuerto() == router.getPuerto())) {
+				
+				paqueteRIP = new Paquete.RIPv2(
+						tabla.obtenerElemento(subred).getSubred(), 
+						tabla.obtenerElemento(subred).getMascara(), 
+						16);
+			
+			} else {
+				
+				paqueteRIP = new Paquete.RIPv2(
+						tabla.obtenerElemento(subred).getSubred(), 
+						tabla.obtenerElemento(subred).getMascara(), 
+						tabla.obtenerElemento(subred).getCoste());
+				
+			}
+			
+			if (!paquete.añadirEntrada(paqueteRIP)) {
+				
+				enviarPaquete(router.getIp(), router.getPuerto(), paquete);
+				
+				paquete = new Paquete();
+				paquete.añadirEntrada(paqueteRIP);
+				
+			}
+			
+		}
+		
+		enviarPaquete(router.getIp(), router.getPuerto(), paquete);
+		
+	}
+	
+	/* ************************* */
 	/* ***** Iniciar Bucle ***** */
 	/* ************************* */
 	
@@ -371,7 +420,13 @@ public class Rip {
 				
 				// ENVIAR PAQUETE
 				
-				Paquete paquete = new Paquete();
+				for (int j = 0; j < routers.size(); j++) {
+					
+					splitHorizon (routers.get(j));
+					
+				}
+				
+				/*Paquete paquete = new Paquete();
 				Paquete.RIPv2 paqueteRIP;
 				
 				paquete.añadirEntrada(new Paquete.RIPv2(ip, 32, 0));
@@ -391,7 +446,7 @@ public class Rip {
 						
 						for (int j = 0; j < routers.size(); j++) {
 							
-							enviarPaquete(routers.get(j).getIp(), routers.get(j).getPuerto(), paquete);
+							enviarPaquete(routers.get(j).getIp(), routers.get(j).getPuerto(), splitHorizon(paquete, routers.get(j)));
 							
 						}
 						
@@ -406,7 +461,7 @@ public class Rip {
 					
 					enviarPaquete(routers.get(j).getIp(), routers.get(j).getPuerto(), paquete);
 					
-				}
+				}*/
 				
 				// RESETEAMOS EL TIMEOUT
 				
