@@ -414,7 +414,7 @@ public class Rip {
 		}
 		
 		byte[] recData = new byte[504]; // 512 ??
-		DatagramPacket datagramPacket = new DatagramPacket(recData, 1024);
+		DatagramPacket datagramPacket = new DatagramPacket(recData, 504);
 		
 		while (true) {
 			
