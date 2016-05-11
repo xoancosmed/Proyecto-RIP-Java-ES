@@ -91,7 +91,7 @@ public class Tabla {
 	public void imprimirTabla() {
 		
 		System.out.println("");
-		System.out.println("SUBRED ----- MASCARA ----- G ----- Vecino ----- Coste");
+		System.out.println("SUBRED ------- MASCARA ------- G ------- Vecino ------- Coste");
 		System.out.println("");
 		
 		Iterator<String> it = tabla.keySet().iterator();
@@ -137,13 +137,13 @@ public class Tabla {
 			String string;
 			
 			string = subred;
-			string += "-";
+			string += "\t";
 			string += mascara;
-			string += "-";
+			string += "\t";
 			string += Integer.toString(g);
-			string += "-";
+			string += "\t";
 			string += vecino.toString();
-			string += "-";
+			string += "\t";
 			string += Integer.toString(coste);
 			
 			return string;

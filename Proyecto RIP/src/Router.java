@@ -25,7 +25,7 @@ public class Router {
 			return ip;
 		}
 		
-		return ip + ":" + puerto + "\t\t";
+		return ip + ":" + puerto;
 		
 	}
 	
