@@ -327,10 +327,6 @@ public class Rip {
 		
 		while (true) {
 			
-			// IMPRIMIR TABLA
-			
-			tabla.imprimirTabla();
-			
 			// RECIBIR PAQUETE
 			
 			try {
@@ -362,6 +358,10 @@ public class Rip {
 				}
 			
 			} catch (SocketTimeoutException ex) {
+				
+				// IMPRIMIR TABLA
+				
+				tabla.imprimirTabla();
 				
 				// ENVIAR PAQUETE
 				
