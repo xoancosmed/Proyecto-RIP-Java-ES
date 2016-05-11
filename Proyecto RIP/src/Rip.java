@@ -80,6 +80,11 @@ public class Rip {
 			
 		}
 		
+		// IMPRIMIR TABLA
+		
+		tabla.imprimirTabla();
+		
+		
 		// ENVÍO INICIAL
 		
 		Paquete paquete = new Paquete();
@@ -111,6 +116,7 @@ public class Rip {
 			enviarPaquete(routers.get(j).getIp(), routers.get(j).getPuerto(), paquete);
 			
 		}
+		
 		
 		// INICIAMOS EL BUCLE
 		
