@@ -350,14 +350,14 @@ public class Rip {
 					String subred = ripRecibido[k].getIp();
 					String mascara = ripRecibido[k].getMascara();
 					Router vecino = new Router(datagramPacket.getAddress().getHostAddress(), datagramPacket.getPort());
-					int coste = ripRecibido[k].getCoste();
+					int coste = ripRecibido[k].getCoste() + 1;
 					int g = obtenerG(subred,vecino,coste);
 					
 					if(subred.equalsIgnoreCase(ip)) continue;
 					if(subred.equalsIgnoreCase("0.0.0.0")) continue;
 					
-					if (g == 0) tabla.añadirElemento(subred, mascara, 0, new Router("",0), coste + 1);
-					else tabla.añadirElemento(subred, mascara, 1, vecino, coste + 1);
+					if (g == 0) tabla.añadirElemento(subred, mascara, 0, new Router("",0), coste);
+					else tabla.añadirElemento(subred, mascara, 1, vecino, coste);
 					
 				}
 			
