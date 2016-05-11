@@ -426,43 +426,6 @@ public class Rip {
 					
 				}
 				
-				/*Paquete paquete = new Paquete();
-				Paquete.RIPv2 paqueteRIP;
-				
-				paquete.añadirEntrada(new Paquete.RIPv2(ip, 32, 0));
-				
-				Iterator<String> it = tabla.obtenerInterator();
-				
-				while (it.hasNext()) {
-					
-					String subred = it.next();
-					
-					paqueteRIP = new Paquete.RIPv2(
-							tabla.obtenerElemento(subred).getSubred(), 
-							tabla.obtenerElemento(subred).getMascara(), 
-							tabla.obtenerElemento(subred).getCoste());
-					
-					if (!paquete.añadirEntrada(paqueteRIP)) {
-						
-						for (int j = 0; j < routers.size(); j++) {
-							
-							enviarPaquete(routers.get(j).getIp(), routers.get(j).getPuerto(), splitHorizon(paquete, routers.get(j)));
-							
-						}
-						
-						paquete = new Paquete();
-						paquete.añadirEntrada(paqueteRIP);
-						
-					}
-					
-				}
-				
-				for (int j = 0; j < routers.size(); j++) {
-					
-					enviarPaquete(routers.get(j).getIp(), routers.get(j).getPuerto(), paquete);
-					
-				}*/
-				
 				// RESETEAMOS EL TIMEOUT
 				
 				socketTimeout = 10000;
