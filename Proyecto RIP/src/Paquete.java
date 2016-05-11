@@ -227,10 +227,10 @@ public class Paquete {
 			mascara = convertirMascara(mascaraBytes);
 			
 			byte[] costeBytes = new byte[4];
-			mascaraBytes[0] = paquete[16];
-			mascaraBytes[1] = paquete[17];
-			mascaraBytes[2] = paquete[18];
-			mascaraBytes[3] = paquete[19];
+			costeBytes[0] = paquete[16];
+			costeBytes[1] = paquete[17];
+			costeBytes[2] = paquete[18];
+			costeBytes[3] = paquete[19];
 			coste = convertirCoste(costeBytes);
 			
 		}
