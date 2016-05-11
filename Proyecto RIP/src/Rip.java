@@ -353,6 +353,9 @@ public class Rip {
 					int coste = ripRecibido[k].getCoste();
 					int g = obtenerG(subred,vecino,coste);
 					
+					if(subred.equalsIgnoreCase(ip)) continue;
+					if(subred.equalsIgnoreCase("0.0.0.0")) continue;
+					
 					if (g == 0) tabla.añadirElemento(subred, mascara, 0, new Router("",0), coste + 1);
 					else tabla.añadirElemento(subred, mascara, 1, vecino, coste + 1);
 					
@@ -376,7 +379,7 @@ public class Rip {
 					paqueteRIP = new Paquete.RIPv2(
 							tabla.obtenerElemento(subred).getSubred(), 
 							tabla.obtenerElemento(subred).getMascara(), 
-							tabla.obtenerElemento(subred).getCoste() + 1);
+							tabla.obtenerElemento(subred).getCoste());
 					
 					if (!paquete.añadirEntrada(paqueteRIP)) {
 						
