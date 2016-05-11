@@ -59,11 +59,11 @@ public class Paquete {
 	
 	private void añadirClave () {
 		
-		paquete.add(BigInteger.valueOf(0xFF).toByteArray()[0]);
-		paquete.add(BigInteger.valueOf(0xFF).toByteArray()[0]);
+		paquete.add((byte) 0xFF);
+		paquete.add((byte) 0xFF);
 		
-		paquete.add(BigInteger.valueOf(0x00).toByteArray()[0]); // Tipo autentificación
-		paquete.add(BigInteger.valueOf(0x02).toByteArray()[0]);
+		paquete.add((byte) 0x00); // Tipo autentificación
+		paquete.add((byte) 0x02);
 		
 		// Introduciomos la contraseña (y rellenamos con 0)
 		
