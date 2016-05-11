@@ -40,6 +40,11 @@ public class Rip {
 		obtenerIPyPuerto(args);
 		
 		
+		// SOLICITAMOS LA CONTRASEÑA
+		
+		solicitarClave();
+		
+		
 		// LEEMOS EL ARCHIVO
 		
 		File archivo = new File(System.getProperty("user.dir"),"ripconf-"+ip+".topo");
@@ -220,7 +225,7 @@ public class Rip {
 	/* ***** Solicitar Contraseña ***** */
 	/* ******************************** */
 	
-	private void solicitarClave () {
+	private static void solicitarClave () {
 		
 		Scanner scan = new Scanner(System.in);
 		
