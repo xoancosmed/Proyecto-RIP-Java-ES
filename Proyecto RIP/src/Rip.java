@@ -19,6 +19,9 @@ public class Rip {
 	private static String ip = "";
 	private static int puerto = 0;
 	
+	private static String password = "";
+	private static boolean hasPassword = false;
+	
 	private static DatagramSocket datagramSocket = null;
 	
 	private static ArrayList<Router> routers;
@@ -87,8 +90,11 @@ public class Rip {
 		
 		// ENVÍO INICIAL
 		
-		Paquete paquete = new Paquete();
+		Paquete paquete;
 		Paquete.RIPv2 paqueteRIP;
+		
+		if (hasPassword) paquete = new Paquete(password);
+		else paquete = new Paquete();
 		
 		paquete.añadirEntrada(new Paquete.RIPv2(ip, 32, 0));
 		
@@ -104,7 +110,8 @@ public class Rip {
 					
 				}
 				
-				paquete = new Paquete(); // ... y creamos uno nuevo.
+				if (hasPassword) paquete = new Paquete(password); // ... y creamos uno nuevo.
+				else paquete = new Paquete(); 
 				paquete.añadirEntrada(paqueteRIP);
 				
 			}
@@ -206,6 +213,31 @@ public class Rip {
 		}
 		
 		// BORRAR ^^^
+		
+	}
+	
+	/* ******************************** */
+	/* ***** Solicitar Contraseña ***** */
+	/* ******************************** */
+	
+	private void solicitarClave () {
+		
+		Scanner scan = new Scanner(System.in);
+		
+		while (true) {
+			
+			System.out.println("¿Quiere introducir contraseña? (Y/N) ");
+			String rec = scan.nextLine().trim();
+			
+			if (rec.equalsIgnoreCase("Y")) break;
+			if (rec.equalsIgnoreCase("N")) return;
+			
+		}
+			
+		hasPassword = true;
+		
+		System.out.println("Introtruzca la contraseña: ");
+		password = scan.nextLine().trim();
 		
 	}
 	
@@ -320,8 +352,11 @@ public class Rip {
 
 	private static void splitHorizon (Router router) {
 		
-		Paquete paquete = new Paquete();
+		Paquete paquete;
 		Paquete.RIPv2 paqueteRIP;
+		
+		if (hasPassword) paquete = new Paquete(password);
+		else paquete = new Paquete();
 		
 		paquete.añadirEntrada(new Paquete.RIPv2(ip, 32, 0));
 		
@@ -352,7 +387,8 @@ public class Rip {
 				
 				enviarPaquete(router.getIp(), router.getPuerto(), paquete);
 				
-				paquete = new Paquete();
+				if (hasPassword) paquete = new Paquete(password);
+				else paquete = new Paquete();
 				paquete.añadirEntrada(paqueteRIP);
 				
 			}
@@ -377,7 +413,7 @@ public class Rip {
 			e.printStackTrace();
 		}
 		
-		byte[] recData = new byte[1024]; // 512 ??
+		byte[] recData = new byte[504]; // 512 ??
 		DatagramPacket datagramPacket = new DatagramPacket(recData, 1024);
 		
 		while (true) {
@@ -392,9 +428,15 @@ public class Rip {
 				long elapsedTime = currentDate.getTime() - initialDate.getTime();
 				datagramSocket.setSoTimeout(socketTimeout - (int)elapsedTime);
 				
-				Paquete.RIPv2[] ripRecibido = Paquete.obtenerEntradas(recData);
-				
 				// TODO PROCESAR PAQUETE (revisar)
+				
+				if (hasPassword == true) {
+					
+					if (!Paquete.obtenerClave(recData).equals(password)) continue;
+					
+				}
+				
+				Paquete.RIPv2[] ripRecibido = Paquete.obtenerEntradas(recData);
 				
 				for (int k = 0; k < ripRecibido.length; k++) {
 					

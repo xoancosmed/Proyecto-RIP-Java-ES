@@ -2,6 +2,7 @@ import java.math.BigInteger;
 import java.net.InetAddress;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -37,7 +38,7 @@ public class Paquete {
 		this.hasPassword = true;
 		
 		añadirCabecera();
-		añadirCifrado();
+		añadirClave();
 		
 	}
 	
@@ -56,7 +57,7 @@ public class Paquete {
 		
 	}
 	
-	private void añadirCifrado () {
+	private void añadirClave () {
 		
 		paquete.add(BigInteger.valueOf(0xFF).toByteArray()[0]);
 		paquete.add(BigInteger.valueOf(0xFF).toByteArray()[0]);
@@ -151,6 +152,25 @@ public class Paquete {
 			entradas[k] = paquetesRIPv2.get(k);
 		
 		return entradas;
+		
+	}
+	
+	public static String obtenerClave (byte[] paqueteBytes) {
+		
+		String passwordString = null;
+		
+		if ((paqueteBytes[4] == 0xFF) && (paqueteBytes[5] == 0xFF)) {
+			
+			byte[] passwordBytes = new byte[16];
+			
+			for (int i = 0, j = 8; i < 16; i++, j++) 
+				passwordBytes[i] = paqueteBytes[j];
+			
+			passwordString = new String(passwordBytes, StandardCharsets.UTF_8).trim();
+			
+		}
+		
+		return passwordString;
 		
 	}
 			
