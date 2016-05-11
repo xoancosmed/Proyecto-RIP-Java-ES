@@ -172,7 +172,7 @@ public class Rip {
 					
 					if (posibleIPb.length == 4 && posibleIPb[0] != 127) {
 						
-						ip = posibleIP.getCanonicalHostName();  // Obtenemos la IP
+						ip = posibleIP.getHostAddress();  // Obtenemos la IP
 						
 						break;
 					}
