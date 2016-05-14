@@ -125,7 +125,7 @@ public class Paquete {
 		
 		int i;
 		
-		if ((paqueteBytes[4] == 0xFF) && (paqueteBytes[5] == 0xFF)) {
+		if (((Byte) paqueteBytes[4]).equals((byte) 0xFF) && ((Byte) paqueteBytes[5]).equals((byte) 0xFF)) {
 			
 			i = 24;
 			
@@ -158,8 +158,8 @@ public class Paquete {
 	public static String obtenerClave (byte[] paqueteBytes) {
 		
 		String passwordString = null;
-		
-		if ((paqueteBytes[4] == 0xFF) && (paqueteBytes[5] == 0xFF)) {
+
+		if (((Byte) paqueteBytes[4]).equals((byte) 0xFF) && ((Byte) paqueteBytes[5]).equals((byte) 0xFF)) {
 			
 			byte[] passwordBytes = new byte[16];
 			
