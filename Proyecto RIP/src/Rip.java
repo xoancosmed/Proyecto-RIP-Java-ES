@@ -442,13 +442,16 @@ public class Rip {
 				}
 				
 				Paquete.RIPv2[] ripRecibido = Paquete.obtenerEntradas(recData);
+				int coste=16;
 				
 				for (int k = 0; k < ripRecibido.length; k++) {
 					
 					String subred = ripRecibido[k].getIp();
 					String mascara = ripRecibido[k].getMascara();
 					Router vecino = new Router(datagramPacket.getAddress().getHostAddress(), datagramPacket.getPort());
-					int coste = ripRecibido[k].getCoste() + 1;
+					if(ripRecibido[k].getCoste()!=16){
+						coste = ripRecibido[k].getCoste() + 1;
+					}
 					int g = obtenerG(subred,vecino,coste);
 					
 					if(subred.equalsIgnoreCase(ip)) continue;
