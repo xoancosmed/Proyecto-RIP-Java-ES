@@ -103,12 +103,9 @@ public class Tabla {
 			ElementoTabla elemento = tabla.get(key);
 			
 			if(elemento.getCoste() >= 16) elemento.setDeathCounter(elemento.getDeathCounter()+1);
-			if(elemento.getDeathCounter()>=4){
-				tabla.remove(key);
-				continue;
-			}
-			
-			System.out.println(elemento.toString());
+			if(elemento.getDeathCounter()>=4) tabla.remove(key);
+			else System.out.println(elemento.toString());
+				
 		}
 		
 	}
