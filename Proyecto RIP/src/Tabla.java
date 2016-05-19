@@ -96,7 +96,19 @@ public class Tabla {
 		System.out.println("");
 		
 		Iterator<String> it = tabla.keySet().iterator();
-		while(it.hasNext()) System.out.println(tabla.get(it.next()).toString());
+		
+		while(it.hasNext()) {
+			
+			String key= it.next();
+			ElementoTabla elemento = tabla.get(key);
+			if(elemento.getCoste() >= 16) elemento.setDeathCounter(elemento.getDeathCounter()+1);
+			if(elemento.getDeathCounter()>=4){
+				tabla.remove(key);
+			}
+			
+			
+			System.out.println(elemento.toString());
+		}
 		
 	}
 	
@@ -114,6 +126,7 @@ public class Tabla {
 		private int g;
 		private Router vecino;
 		private int coste;
+		private int deathCounter;
 		
 		// CONSTRUCTORES
 		
@@ -191,6 +204,14 @@ public class Tabla {
 
 		public void setCoste(int coste) {
 			this.coste = coste;
+		}
+
+		public int getDeathCounter() {
+			return deathCounter;
+		}
+
+		public void setDeathCounter(int deathCounter) {
+			this.deathCounter = deathCounter;
 		}
 		
 	}
