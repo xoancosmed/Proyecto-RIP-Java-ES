@@ -421,6 +421,7 @@ public class Rip {
 		byte[] recData = new byte[504]; // 512 ??
 		DatagramPacket datagramPacket = new DatagramPacket(recData, 504);
 		
+		
 		while (true) {
 			
 			// RECIBIR PAQUETE
@@ -438,6 +439,16 @@ public class Rip {
 				if (hasPassword == true) {
 					
 					if (!Paquete.obtenerClave(recData).equals(password)) continue;
+					
+				}
+				for(int i=0 ;i<routers.size();i++){
+					
+					if(datagramPacket.getAddress().getHostAddress().equalsIgnoreCase(routers.get(i).getIp()) &&
+							(datagramPacket.getPort()==routers.get(i).getPuerto())	){
+						
+						routers.get(i).setHaContestado(true);
+						
+					}
 					
 				}
 				
@@ -467,6 +478,16 @@ public class Rip {
 				// IMPRIMIR TABLA
 				
 				tabla.imprimirTabla();
+				//COMPROBAR MUERTOS
+				
+				for(int i=0;i<routers.size();i++){
+					routers.get(i).actualizarContador();
+					if(routers.get(i).getContador()>3){				//TODO Cambiar a 6
+						tabla.obtenerElemento(routers.get(i).getIp()).setCoste(16);
+					}
+					
+				}
+				
 				
 				// ENVIAR PAQUETE
 				

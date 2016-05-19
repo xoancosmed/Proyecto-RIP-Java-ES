@@ -5,7 +5,8 @@ public class Router {
 	
 	private String ip;
 	private int puerto;
-	
+	private int contador=0;
+	private boolean haContestado=false;
 	
 	// CONSTRUCTORES
 	
@@ -18,6 +19,19 @@ public class Router {
 	
 	
 	// MÉTODOS
+	
+	public void actualizarContador(){
+		if(haContestado){
+			contador=0;
+			
+		}
+		if(!haContestado){
+			contador++;
+			
+			
+		}
+		haContestado=false;
+	}
 	
 	public String toString() {
 		
@@ -46,6 +60,26 @@ public class Router {
 
 	public void setPuerto(int puerto) {
 		this.puerto = puerto;
+	}
+
+
+	public int getContador() {
+		return contador;
+	}
+
+
+	public void setContador(int contador) {
+		this.contador = contador;
+	}
+
+
+	public boolean isHaContestado() {
+		return haContestado;
+	}
+
+
+	public void setHaContestado(boolean haContestado) {
+		this.haContestado = haContestado;
 	}
 	
 }
