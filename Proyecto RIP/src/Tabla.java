@@ -102,11 +102,10 @@ public class Tabla {
 		
 		while(it.hasNext()) {
 			
-			String key= it.next();
-			ElementoTabla elemento = tabla.get(key);
+			ElementoTabla elemento = tabla.get(it.next());
 			
 			if(elemento.getCoste() >= 16) elemento.setDeathCounter(elemento.getDeathCounter()+1);
-			if(elemento.getDeathCounter()>=4) tabla.remove(key);
+			if(elemento.getDeathCounter()>=4) it.remove();
 			else System.out.println(elemento.toString());
 				
 		}
