@@ -30,6 +30,8 @@ public class Tabla {
 				
 		}
 		
+		if (tabla.get(nuevo.getSubred()).getG() == 0) return;
+		
 		if (tabla.get(nuevo.getSubred()).getVecino().getIp().equalsIgnoreCase(nuevo.getVecino().getIp()) &&
 				(tabla.get(nuevo.getSubred()).getVecino().getPuerto() == nuevo.getVecino().getPuerto())) {
 			
