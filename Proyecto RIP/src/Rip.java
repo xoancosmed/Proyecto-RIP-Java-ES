@@ -485,7 +485,7 @@ public class Rip {
 				
 					routers.get(i).actualizarContador();
 					
-					if(routers.get(i).getContador()>3){				// TODO Cambiar a 6
+					if(routers.get(i).getContador()>=3){				// TODO Cambiar a 6
 						tabla.obtenerElemento(routers.get(i).getIp()).setCoste(16);
 					}
 					
