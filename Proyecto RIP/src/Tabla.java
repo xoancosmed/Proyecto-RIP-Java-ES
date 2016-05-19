@@ -25,6 +25,8 @@ public class Tabla {
 		
 		if (tabla.get(nuevo.getSubred()) == null) {
 			
+			if (nuevo.getCoste() >= 16) return;
+			
 			tabla.put(nuevo.getSubred(), nuevo);
 			return;
 				
