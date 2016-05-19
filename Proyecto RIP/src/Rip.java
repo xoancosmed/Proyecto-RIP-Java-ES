@@ -486,11 +486,18 @@ public class Rip {
 					routers.get(i).actualizarContador();
 					
 					if(routers.get(i).getContador()>=3){				// TODO Cambiar a 6
-						tabla.obtenerElemento(routers.get(i).getIp()).setCoste(16);
+					
+						Tabla.ElementoTabla elemento = tabla.obtenerElemento(routers.get(i).getIp());
+						if (elemento != null) elemento.setCoste(16);
+						
 					}
 					
 					if(routers.get(i).getContador()==0){			// TODO Revisar (Very chapuza, very effective)
-						tabla.obtenerElemento(routers.get(i).getIp()).setCoste(1);
+					
+						Tabla.ElementoTabla elemento = tabla.obtenerElemento(routers.get(i).getIp());
+						if (elemento != null) elemento.setCoste(1);
+						else tabla.añadirElemento(routers.get(i).getIp(), 32, 0, new Router("",0), 1);
+						
 					}
 					
 				}
