@@ -95,6 +95,9 @@ public class Tabla {
 		System.out.println("SUBRED ------- MASCARA ------- G ------- Vecino ------- Coste");
 		System.out.println("");
 		
+		if (tabla == null) return;
+		if (tabla.isEmpty()) return;
+		
 		Iterator<String> it = tabla.keySet().iterator();
 		
 		while(it.hasNext()) {
