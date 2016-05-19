@@ -101,11 +101,12 @@ public class Tabla {
 			
 			String key= it.next();
 			ElementoTabla elemento = tabla.get(key);
+			
 			if(elemento.getCoste() >= 16) elemento.setDeathCounter(elemento.getDeathCounter()+1);
 			if(elemento.getDeathCounter()>=4){
 				tabla.remove(key);
+				continue;
 			}
-			
 			
 			System.out.println(elemento.toString());
 		}
@@ -126,6 +127,7 @@ public class Tabla {
 		private int g;
 		private Router vecino;
 		private int coste;
+		
 		private int deathCounter;
 		
 		// CONSTRUCTORES
