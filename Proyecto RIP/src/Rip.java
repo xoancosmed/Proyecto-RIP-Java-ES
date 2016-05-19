@@ -478,12 +478,19 @@ public class Rip {
 				// IMPRIMIR TABLA
 				
 				tabla.imprimirTabla();
-				//COMPROBAR MUERTOS
+				
+				//COMPROBAR MUERTOS Y VIVOS
 				
 				for(int i=0;i<routers.size();i++){
+				
 					routers.get(i).actualizarContador();
-					if(routers.get(i).getContador()>3){				//TODO Cambiar a 6
+					
+					if(routers.get(i).getContador()>3){				// TODO Cambiar a 6
 						tabla.obtenerElemento(routers.get(i).getIp()).setCoste(16);
+					}
+					
+					if(routers.get(i).getContador()==0){			// TODO Revisar (Very chapuza, very effective)
+						tabla.obtenerElemento(routers.get(i).getIp()).setCoste(1);
 					}
 					
 				}
