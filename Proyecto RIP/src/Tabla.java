@@ -27,10 +27,10 @@ public class Tabla {
 			
 			tabla.put(nuevo.getSubred(), nuevo);
 			
-		} else if (tabla.get(nuevo.getSubred()).getVecino().getIp().equalsIgnoreCase(nuevo.getVecino().getIp()) &&
+		/*} else if (tabla.get(nuevo.getSubred()).getVecino().getIp().equalsIgnoreCase(nuevo.getVecino().getIp()) &&
 				(tabla.get(nuevo.getSubred()).getVecino().getPuerto() == nuevo.getVecino().getPuerto())) {
 			
-			tabla.get(nuevo.getSubred()).setCoste(nuevo.getCoste());;
+			tabla.get(nuevo.getSubred()).setCoste(nuevo.getCoste());;*/
 			
 		} else if (tabla.get(nuevo.getSubred()).getCoste() > nuevo.getCoste()) {
 			
