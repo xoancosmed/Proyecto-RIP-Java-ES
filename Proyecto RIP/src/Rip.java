@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Iterator;
+import java.util.Random;
 import java.util.Scanner;
 
 public class Rip {
@@ -410,7 +411,7 @@ public class Rip {
 	
 	private static void iniciarBucle () {
 		
-		int socketTimeout = 10000;
+		int socketTimeout = obtenerTimeOut();
 		Date initialDate = new Date();
 		try {
 			datagramSocket.setSoTimeout(socketTimeout);
@@ -513,7 +514,7 @@ public class Rip {
 				
 				// RESETEAMOS EL TIMEOUT
 				
-				socketTimeout = 10000;
+				socketTimeout = obtenerTimeOut();
 				initialDate = new Date();
 				try {
 					datagramSocket.setSoTimeout(socketTimeout);
@@ -526,7 +527,7 @@ public class Rip {
 				
 				ex.printStackTrace();
 				
-				socketTimeout = 10000;
+				socketTimeout = obtenerTimeOut();
 				initialDate = new Date();
 				try {
 					datagramSocket.setSoTimeout(socketTimeout);
@@ -560,6 +561,23 @@ public class Rip {
 			
 		
 		return 1;
+		
+	}
+	
+	/* *************************** */
+	/* ***** Obtener TimeOut ***** */
+	/* *************************** */
+	
+	private static int obtenerTimeOut () { // TODO Revisar
+		
+		int valBase = 10000;
+		int limInferior = -250;
+		int limSuperior = +250;
+		
+		Random rand = new Random();
+		int valAleatorio = rand.nextInt(limSuperior-limInferior) + limInferior;
+		
+		return valAleatorio + valBase;
 		
 	}
 	
