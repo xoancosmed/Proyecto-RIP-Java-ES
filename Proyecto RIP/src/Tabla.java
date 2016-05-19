@@ -26,17 +26,19 @@ public class Tabla {
 		if (tabla.get(nuevo.getSubred()) == null) {
 			
 			tabla.put(nuevo.getSubred(), nuevo);
-			
-		/*} else if (tabla.get(nuevo.getSubred()).getVecino().getIp().equalsIgnoreCase(nuevo.getVecino().getIp()) &&
-				(tabla.get(nuevo.getSubred()).getVecino().getPuerto() == nuevo.getVecino().getPuerto())) {
-			
-			tabla.get(nuevo.getSubred()).setCoste(nuevo.getCoste());;*/
-			
+				
 		} else if (tabla.get(nuevo.getSubred()).getCoste() > nuevo.getCoste()) {
 			
 			tabla.get(nuevo.getSubred()).setMascara(nuevo.getMascara());
 			tabla.get(nuevo.getSubred()).setG(nuevo.getG());
 			tabla.get(nuevo.getSubred()).setVecino(nuevo.getVecino());
+			tabla.get(nuevo.getSubred()).setCoste(nuevo.getCoste());
+			
+		}
+		
+		if (tabla.get(nuevo.getSubred()).getVecino().getIp().equalsIgnoreCase(nuevo.getVecino().getIp()) &&
+				(tabla.get(nuevo.getSubred()).getVecino().getPuerto() == nuevo.getVecino().getPuerto())) {
+			
 			tabla.get(nuevo.getSubred()).setCoste(nuevo.getCoste());
 			
 		}
