@@ -478,7 +478,7 @@ public class Rip {
 					String mascara = ripRecibido[k].getMascara();
 					Router vecino = new Router(datagramPacket.getAddress().getHostAddress(), datagramPacket.getPort());
 					int coste=16;
-					if(ripRecibido[k].getCoste()<=16){
+					if(ripRecibido[k].getCoste()<16){
 						coste = ripRecibido[k].getCoste() + 1;
 					}
 					int g = obtenerG(subred,vecino,coste);
