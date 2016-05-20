@@ -28,15 +28,20 @@ public class Router {
 	}
 	
 	public void actualizarContador(){
+		
 		if(haContestado){
+			
 			contador=0;
 			
 		}
+		
 		if(!haContestado){
-			contador++;
 			
+			if (contador >= 10) contador = 10;
+			else contador++;
 			
 		}
+		
 		haContestado=false;
 	}
 	

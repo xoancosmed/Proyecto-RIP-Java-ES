@@ -279,7 +279,7 @@ public class Rip {
 				try {
 					lonRed = Integer.parseInt(argsSeparados[1]);
 				} catch (NumberFormatException ex) {
-					System.out.println("Puerto incorrecto");
+					System.out.println("Longitud incorrecta");
 					System.exit(-1);
 				}
 				
@@ -438,28 +438,20 @@ public class Rip {
 				// TODO PROCESAR PAQUETE (revisar)
 				
 				
-				
 				if (hasPassword == true) {
 					
-					//if (!Paquete.obtenerClave(recData).equals(password)) continue;
 					String claveRecibida=Paquete.obtenerClave(recData);
 					
-					if(claveRecibida==null)
-						continue;
-					else if(!claveRecibida.equals(password))continue;
+					if(claveRecibida==null) continue;
+					else if(!claveRecibida.equals(password)) continue;
 					
-				}
-				else if(hasPassword==false){
+				} else if(hasPassword==false){
 					
 					String claveRecibida=Paquete.obtenerClave(recData);
 					
-					if(claveRecibida!=null)
-						continue;
-					
+					if(claveRecibida!=null) continue;
 					
 				}
-				
-				
 				
 				for(int i=0 ;i<routers.size();i++){
 					
@@ -480,7 +472,7 @@ public class Rip {
 					String mascara = ripRecibido[k].getMascara();
 					Router vecino = new Router(datagramPacket.getAddress().getHostAddress(), datagramPacket.getPort());
 					int coste=16;
-					if(ripRecibido[k].getCoste()!=16){
+					if(ripRecibido[k].getCoste()<=16){
 						coste = ripRecibido[k].getCoste() + 1;
 					}
 					int g = obtenerG(subred,vecino,coste);
@@ -579,8 +571,6 @@ public class Rip {
 	
 	private static int obtenerG (String subred, Router vecino, int coste) {
 		
-		if (coste < 2) return 0;
-		
 		if (subred.equalsIgnoreCase(vecino.getIp())) return 0;
 		
 		for (int m = 0; m < routers.size(); m++) 
@@ -589,6 +579,7 @@ public class Rip {
 		for (int n = 0; n < nets.size(); n++)
 			if (nets.get(n).getIp().equalsIgnoreCase(subred)) return 0;
 			
+		if (coste < 2) return 0;
 		
 		return 1;
 		
