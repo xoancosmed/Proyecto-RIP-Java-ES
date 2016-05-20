@@ -437,11 +437,30 @@ public class Rip {
 				
 				// TODO PROCESAR PAQUETE (revisar)
 				
+				
+				
 				if (hasPassword == true) {
 					
-					if (!Paquete.obtenerClave(recData).equals(password)) continue;
+					//if (!Paquete.obtenerClave(recData).equals(password)) continue;
+					String claveRecibida=Paquete.obtenerClave(recData);
+					
+					if(claveRecibida==null)
+						continue;
+					else if(!claveRecibida.equals(password))continue;
 					
 				}
+				else if(hasPassword==false){
+					
+					String claveRecibida=Paquete.obtenerClave(recData);
+					
+					if(claveRecibida!=null)
+						continue;
+					
+					
+				}
+				
+				
+				
 				for(int i=0 ;i<routers.size();i++){
 					
 					if(datagramPacket.getAddress().getHostAddress().equalsIgnoreCase(routers.get(i).getIp()) &&
