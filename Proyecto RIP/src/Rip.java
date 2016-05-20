@@ -512,14 +512,12 @@ public class Rip {
 						
 						Iterator<String> it= tabla.obtenerInterator();
 						
-						
 						while(it.hasNext()){
-							Tabla.ElementoTabla dependencias=tabla.obtenerElemento(it.next());
-							if(dependencias.getVecino().equals(routers.get(i).getIp())){
-								
-								dependencias.setCoste(16);
-							}
 							
+							Tabla.ElementoTabla dependencia = tabla.obtenerElemento(it.next());
+							
+							if(dependencia.getVecino().equals(routers.get(i)))
+								dependencia.setCoste(16);
 							
 						}
 						
