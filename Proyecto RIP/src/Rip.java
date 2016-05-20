@@ -429,6 +429,7 @@ public class Rip {
 			
 			try {
 				
+				for (int k = 0; k < recData.length; k++) recData[k] = (byte) 0x0; // Reiniciamos el array de bytes.
 				datagramSocket.receive(datagramPacket);	//Recibimos el paquete RIP
 				
 				Date currentDate = new Date();
@@ -466,15 +467,9 @@ public class Rip {
 				
 				Paquete.RIPv2[] ripRecibido = Paquete.obtenerEntradas(recData);
 				
-				ArrayList<String> yaProcesado = new ArrayList<String>(); // TODO CHAPUZA
-				
 				for (int k = 0; k < ripRecibido.length; k++) {
 					
 					String subred = ripRecibido[k].getIp();
-					
-					if (yaProcesado.contains(subred)) continue; // TODO CHAPUZA
-					yaProcesado.add(subred);
-					
 					String mascara = ripRecibido[k].getMascara();
 					Router vecino = new Router(datagramPacket.getAddress().getHostAddress(), datagramPacket.getPort());
 					int coste=16;
