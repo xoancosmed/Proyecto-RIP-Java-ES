@@ -24,7 +24,9 @@ public class Router {
 
 		if (this.getIp().equalsIgnoreCase(otro.getIp()) && (this.getPuerto() == otro.getPuerto())) 
 			return true;
+		
 		return false;
+		
 	}
 	
 	public void actualizarContador(){

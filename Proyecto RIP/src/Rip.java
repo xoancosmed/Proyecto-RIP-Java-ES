@@ -206,9 +206,7 @@ public class Rip {
 			
 		}
 		
-		// TODO BORRAR VVVV
-
-		if(ip.equals("")){
+		/*if(ip.equals("")){
 			
 			try {
 				ip=InetAddress.getLocalHost().getHostAddress();
@@ -216,9 +214,7 @@ public class Rip {
 				e.printStackTrace();
 			}
 			
-		}
-		
-		// BORRAR ^^^
+		}*/
 		
 	}
 	
@@ -236,7 +232,13 @@ public class Rip {
 			String rec = scan.nextLine().trim();
 			
 			if (rec.equalsIgnoreCase("Y")) break;
-			if (rec.equalsIgnoreCase("N")) return;
+			
+			if (rec.equalsIgnoreCase("N")) {
+				
+				scan.close();
+				return;
+				
+			}
 			
 		}
 			
@@ -244,6 +246,8 @@ public class Rip {
 		
 		System.out.println("Introtruzca la contraseña: ");
 		password = scan.nextLine().trim();
+		
+		scan.close();
 		
 	}
 	
@@ -352,11 +356,11 @@ public class Rip {
 		
 	}
 	
-	/* ************************* */
-	/* ***** Split Horizon ***** */
-	/* ************************* */
+	/* ************************ */
+	/* ***** Enviar Tabla ***** */
+	/* ************************ */
 
-	private static void splitHorizon (Router router) {
+	private static void enviarTabla (Router router) {
 		
 		Paquete paquete;
 		Paquete.RIPv2 paqueteRIP;
@@ -419,7 +423,7 @@ public class Rip {
 			e.printStackTrace();
 		}
 		
-		byte[] recData = new byte[504]; // 512 ??
+		byte[] recData = new byte[504];
 		DatagramPacket datagramPacket = new DatagramPacket(recData, 504);
 		
 		
@@ -436,8 +440,9 @@ public class Rip {
 				long elapsedTime = currentDate.getTime() - initialDate.getTime();
 				datagramSocket.setSoTimeout(socketTimeout - (int)elapsedTime);
 				
-				// TODO PROCESAR PAQUETE (revisar)
+				// PROCESAR PAQUETE
 				
+				// Vemos si tiene contraseña
 				
 				if (hasPassword == true) {
 					
@@ -454,6 +459,8 @@ public class Rip {
 					
 				}
 				
+				// Registramos que este router sigue enviando
+				
 				for(int i=0 ;i<routers.size();i++){
 					
 					if(datagramPacket.getAddress().getHostAddress().equalsIgnoreCase(routers.get(i).getIp()) &&
@@ -464,6 +471,8 @@ public class Rip {
 					}
 					
 				}
+				
+				// Interpretamos el paquete
 				
 				Paquete.RIPv2[] ripRecibido = Paquete.obtenerEntradas(recData);
 				
@@ -492,13 +501,13 @@ public class Rip {
 				
 				tabla.imprimirTabla();
 				
-				//COMPROBAR MUERTOS Y VIVOS
+				//COMPROBAR VECINOS CAIDOS
 				
 				for(int i=0;i<routers.size();i++){
 				
 					routers.get(i).actualizarContador();
 					
-					if(routers.get(i).getContador()>=3){				// TODO Cambiar a 6
+					if(routers.get(i).getContador()>=6){ // Está caido
 					
 						Tabla.ElementoTabla elemento = tabla.obtenerElemento(routers.get(i).getIp());
 						if (elemento != null) elemento.setCoste(16);
@@ -516,7 +525,7 @@ public class Rip {
 						
 					}
 					
-					if(routers.get(i).getContador()==0){			// TODO Revisar (Very chapuza, very effective)
+					if(routers.get(i).getContador()==0){ // Está bien
 					
 						Tabla.ElementoTabla elemento = tabla.obtenerElemento(routers.get(i).getIp());
 						if (elemento != null) elemento.setCoste(1);
@@ -526,12 +535,11 @@ public class Rip {
 					
 				}
 				
-				
 				// ENVIAR PAQUETE
 				
 				for (int j = 0; j < routers.size(); j++) {
 					
-					splitHorizon (routers.get(j));
+					enviarTabla (routers.get(j));
 					
 				}
 				

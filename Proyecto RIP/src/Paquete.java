@@ -15,8 +15,6 @@ public class Paquete {
 	// ATRIBUTOS
 	
 	private ArrayList<Byte> paquete = new ArrayList<Byte>();
-	
-	private ArrayList<RIPv2> entradasRIPv2 = new ArrayList<RIPv2>(); // TODO BORRAR
 	private int numEntradas = 0;
 	
 	private int comando = 0x02;
@@ -100,8 +98,6 @@ public class Paquete {
 		}
 		
 		paquete.addAll(Arrays.asList(entrada.obtener())); // Añadimos la entrada
-		
-		entradasRIPv2.add(entrada);
 		numEntradas++;
 		
 		return true;
