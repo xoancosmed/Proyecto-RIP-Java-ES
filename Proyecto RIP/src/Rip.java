@@ -510,6 +510,19 @@ public class Rip {
 						Tabla.ElementoTabla elemento = tabla.obtenerElemento(routers.get(i).getIp());
 						if (elemento != null) elemento.setCoste(16);
 						
+						Iterator<String> it= tabla.obtenerInterator();
+						
+						
+						while(it.hasNext()){
+							Tabla.ElementoTabla dependencias=tabla.obtenerElemento(it.next());
+							if(dependencias.getVecino().equals(routers.get(i).getIp())){
+								
+								dependencias.setCoste(16);
+							}
+							
+							
+						}
+						
 					}
 					
 					if(routers.get(i).getContador()==0){			// TODO Revisar (Very chapuza, very effective)
@@ -587,7 +600,7 @@ public class Rip {
 	/* ***** Obtener TimeOut ***** */
 	/* *************************** */
 	
-	private static int obtenerTimeOut () { // TODO Revisar
+	private static int obtenerTimeOut () { 
 		
 		int valBase = 10000;
 		int limInferior = -250;

@@ -20,6 +20,13 @@ public class Router {
 	
 	// MÉTODOS
 	
+	public boolean equals(Router otro){
+
+		if (this.getIp().equalsIgnoreCase(otro.getIp()) && (this.getPuerto() == otro.getPuerto())) 
+			return true;
+		return false;
+	}
+	
 	public void actualizarContador(){
 		if(haContestado){
 			contador=0;
