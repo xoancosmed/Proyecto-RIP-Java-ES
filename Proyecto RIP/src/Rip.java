@@ -99,14 +99,14 @@ public class Rip {
 		Paquete paquete;
 		Paquete.RIPv2 paqueteRIP;
 		
-		if (hasPassword) paquete = new Paquete(password);
-		else paquete = new Paquete();
+		if (hasPassword) paquete = new Paquete(password); // Si tiene contraseña se la metemos ...
+		else paquete = new Paquete(); // Sino no.
 		
-		paquete.añadirEntrada(new Paquete.RIPv2(ip, 32, 0));
+		paquete.añadirEntrada(new Paquete.RIPv2(ip, 32, 0)); // Nos metemos en el paquete
 		
 		for (int i = 0; i < nets.size(); i++) {
 			
-			paqueteRIP = new Paquete.RIPv2(nets.get(i).getIp(), nets.get(i).getLongitud(), 1);
+			paqueteRIP = new Paquete.RIPv2(nets.get(i).getIp(), nets.get(i).getLongitud(), 1); // Nueva entrada con la red i
 			
 			if (!paquete.añadirEntrada(paqueteRIP)) { // Si no entran más paquetes ...
 				
@@ -228,8 +228,8 @@ public class Rip {
 		
 		while (true) {
 			
-			System.out.println("¿Quiere introducir contraseña? (Y/N) ");
-			String rec = scan.nextLine().trim();
+			System.out.println("¿Quiere introducir contraseña? (Y/N) "); // Pedimos contraseña
+			String rec = scan.nextLine().trim(); // Leemos del teclado
 			
 			if (rec.equalsIgnoreCase("Y")) break;
 			
@@ -242,10 +242,10 @@ public class Rip {
 			
 		}
 			
-		hasPassword = true;
+		hasPassword = true; // Activamos el flag
 		
 		System.out.println("Introtruzca la contraseña: ");
-		password = scan.nextLine().trim();
+		password = scan.nextLine().trim(); // Leemos la contraseña
 		
 		scan.close();
 		
@@ -261,7 +261,7 @@ public class Rip {
 		
 		try {
 			
-			lector = new Scanner(new FileInputStream(archivo));
+			lector = new Scanner(new FileInputStream(archivo)); // Abrimos el archivo
 		
 		} catch (Exception ex) {
 		
@@ -272,9 +272,9 @@ public class Rip {
 		
 		while(lector.hasNextLine()) {
 			
-			String linea = lector.nextLine().trim();
+			String linea = lector.nextLine().trim(); // Leemos una línea
 			
-			if (linea.contains("/")) {
+			if (linea.contains("/")) { // Si contiene barra => red
 				
 				String[] argsSeparados = linea.split("/");
 				String ipRed = argsSeparados[0];
@@ -291,7 +291,7 @@ public class Rip {
 				
 			} else {
 				
-				if (linea.contains(":")) {
+				if (linea.contains(":")) { // Si contiene ":" => router con puerto
 					
 					String[] argsSeparados = linea.split(":");
 					String ipRouter = argsSeparados[0];
@@ -310,7 +310,7 @@ public class Rip {
 					
 					// Por ahora damos por hecho que no hay errores
 					
-					routers.add(new Router(linea,5512));
+					routers.add(new Router(linea,5512)); // Sino => router sin puerto (se usa el predeterminado)
 					
 				}
 				
@@ -330,6 +330,7 @@ public class Rip {
 		
 		try {
 			
+			// Creamos el paquete datagrama
 			dataPack = new DatagramPacket(paquete.obtenerPaquete(), paquete.obtenerPaquete().length, InetAddress.getByName(ipDestino),puertoDestino);
 		
 		} catch (UnknownHostException e) {
@@ -342,7 +343,7 @@ public class Rip {
 		
 		try {
 			
-			datagramSocket.send(dataPack);
+			datagramSocket.send(dataPack); // Enviamos el datagrama
 			
 		} catch (IOException e) {
 			
@@ -365,26 +366,26 @@ public class Rip {
 		Paquete paquete;
 		Paquete.RIPv2 paqueteRIP;
 		
-		if (hasPassword) paquete = new Paquete(password);
+		if (hasPassword) paquete = new Paquete(password); // Si hay contraseña, la metemos
 		else paquete = new Paquete();
 		
-		paquete.añadirEntrada(new Paquete.RIPv2(ip, 32, 0));
+		paquete.añadirEntrada(new Paquete.RIPv2(ip, 32, 0)); // Nos metemos en el paquete
 		
 		Iterator<String> it = tabla.obtenerInterator();
 		
-		while (it.hasNext()) {
+		while (it.hasNext()) {  // Recorremos la tabla
 			
 			String subred = it.next();
 			
-			if (tabla.obtenerElemento(subred).getVecino().getIp().equalsIgnoreCase(router.getIp())
+			if (tabla.obtenerElemento(subred).getVecino().getIp().equalsIgnoreCase(router.getIp()) // Si el vecino es al que le envío la tabla ...
 					&& (tabla.obtenerElemento(subred).getVecino().getPuerto() == router.getPuerto())) {
 				
 				paqueteRIP = new Paquete.RIPv2(
 						tabla.obtenerElemento(subred).getSubred(), 
 						tabla.obtenerElemento(subred).getMascara(), 
-						16);
+						16); // Coste 16 por el Split Horizon
 			
-			} else {
+			} else { // Sino ...
 				
 				paqueteRIP = new Paquete.RIPv2(
 						tabla.obtenerElemento(subred).getSubred(), 
@@ -393,11 +394,11 @@ public class Rip {
 				
 			}
 			
-			if (!paquete.añadirEntrada(paqueteRIP)) {
+			if (!paquete.añadirEntrada(paqueteRIP)) { // Si llegamos al máximo tamaño del paquete ...
 				
-				enviarPaquete(router.getIp(), router.getPuerto(), paquete);
+				enviarPaquete(router.getIp(), router.getPuerto(), paquete); // ... enviamos este ...
 				
-				if (hasPassword) paquete = new Paquete(password);
+				if (hasPassword) paquete = new Paquete(password); // ... y creamos otro.
 				else paquete = new Paquete();
 				paquete.añadirEntrada(paqueteRIP);
 				
@@ -405,7 +406,7 @@ public class Rip {
 			
 		}
 		
-		enviarPaquete(router.getIp(), router.getPuerto(), paquete);
+		enviarPaquete(router.getIp(), router.getPuerto(), paquete); // Enviamos el paquete
 		
 	}
 	
@@ -482,15 +483,15 @@ public class Rip {
 					String mascara = ripRecibido[k].getMascara();
 					Router vecino = new Router(datagramPacket.getAddress().getHostAddress(), datagramPacket.getPort());
 					int coste=16;
-					if(ripRecibido[k].getCoste()<16){
+					if(ripRecibido[k].getCoste()<16){ // El coste no puede ser mayor que 16
 						coste = ripRecibido[k].getCoste() + 1;
 					}
 					int g = obtenerG(subred,vecino,coste);
 					
-					if(subred.equalsIgnoreCase(ip)) continue;
-					if(subred.equalsIgnoreCase("0.0.0.0")) continue;
+					if(subred.equalsIgnoreCase(ip)) continue; // No hacemos caso a las referencias a nosotros mismos
+					if(subred.equalsIgnoreCase("0.0.0.0")) continue; // No hacemos caso a las IPs vacías (en paquete llegó todo 0s)
 					
-					if (g == 0) tabla.añadirElemento(subred, mascara, 0, new Router("",0), coste);
+					if (g == 0) tabla.añadirElemento(subred, mascara, 0, new Router("",0), coste); // Añadimos en la tabla
 					else tabla.añadirElemento(subred, mascara, 1, vecino, coste);
 					
 				}
@@ -507,7 +508,7 @@ public class Rip {
 				
 					routers.get(i).actualizarContador();
 					
-					if(routers.get(i).getContador()>=6){ // Está caido
+					if(routers.get(i).getContador()>=6){ // Está caido si lleva 6 ciclos sin contestar
 					
 						Tabla.ElementoTabla elemento = tabla.obtenerElemento(routers.get(i).getIp());
 						if (elemento != null) elemento.setCoste(16);
@@ -600,12 +601,14 @@ public class Rip {
 	
 	private static int obtenerTimeOut () { 
 		
+		// Generamos un timeout aleatorio entre 9750 y 10250 milisegundos
+		
 		int valBase = 10000;
 		int limInferior = -250;
 		int limSuperior = +250;
 		
 		Random rand = new Random();
-		int valAleatorio = rand.nextInt(limSuperior-limInferior) + limInferior;
+		int valAleatorio = rand.nextInt(limSuperior-limInferior) + limInferior; 
 		
 		return valAleatorio + valBase;
 		

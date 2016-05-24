@@ -23,6 +23,7 @@ public class Tabla {
 	
 	public void añadirElemento (ElementoTabla nuevo) {
 		
+		// Si no está en la tabla se añade sí o sí
 		if (tabla.get(nuevo.getSubred()) == null) {
 			
 			if (nuevo.getCoste() >= 16) return;
@@ -34,6 +35,7 @@ public class Tabla {
 		
 		if (tabla.get(nuevo.getSubred()).getG() == 0) return;
 		
+		// Si el vecino es el mismo, entonces le hacemos siempre caso.
 		if (tabla.get(nuevo.getSubred()).getVecino().getIp().equalsIgnoreCase(nuevo.getVecino().getIp()) &&
 				(tabla.get(nuevo.getSubred()).getVecino().getPuerto() == nuevo.getVecino().getPuerto())) {
 			
@@ -41,6 +43,7 @@ public class Tabla {
 			
 		}
 		
+		// Si el coste es menor que el que tenemos en la tabla, lo reemplazamos.
 		if (tabla.get(nuevo.getSubred()).getCoste() > nuevo.getCoste()) {
 			
 			tabla.get(nuevo.getSubred()).setMascara(nuevo.getMascara());
@@ -93,12 +96,16 @@ public class Tabla {
 	
 	public void imprimirTabla() {
 		
+		// Imprimimos la tabla
+		
 		System.out.println("");
 		System.out.println("SUBRED ------- MASCARA ------- G ------- Vecino ------- Coste");
 		System.out.println("");
 		
 		if (tabla == null) return;
 		if (tabla.isEmpty()) return;
+		
+		// Aprovechamos para revisar qué elementos hay que borrar de la tabla
 		
 		Iterator<String> it = tabla.keySet().iterator();
 		

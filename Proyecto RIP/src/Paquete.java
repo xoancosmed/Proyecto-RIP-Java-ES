@@ -26,17 +26,17 @@ public class Paquete {
 	
 	public Paquete () {
 		
-		añadirCabecera();
+		añadirCabecera(); // Añadimos la cabecera
 		
 	}
 	
-	public Paquete (String password) {
+	public Paquete (String password) { // Si tiene clave ...
 		
 		this.password = password;
 		this.hasPassword = true;
 		
-		añadirCabecera();
-		añadirClave();
+		añadirCabecera(); // ... añadimos la cabecera ...
+		añadirClave(); // ... y el campo de la clave.
 		
 	}
 	
@@ -106,6 +106,8 @@ public class Paquete {
 	
 	public byte[] obtenerPaquete() {
 		
+		 // Devolvemos el paquete en bytes
+		
 		byte[] paqueteBytes = new byte[paquete.size()];
 		
 		for (int i = 0; i < paquete.size(); i++) 
@@ -117,15 +119,18 @@ public class Paquete {
 	
 	public static RIPv2[] obtenerEntradas (byte[] paqueteBytes) {
 		
+		// Lee un paquete recibido, y a partir de el obtiene las diferentes
+		// entradas RIPv2 que hay en el paquete.
+		
 		ArrayList<RIPv2> paquetesRIPv2 = new ArrayList<RIPv2>();
 		
 		int i;
 		
 		if (((Byte) paqueteBytes[4]).equals((byte) 0xFF) && ((Byte) paqueteBytes[5]).equals((byte) 0xFF)) {
 			
-			i = 24;
+			i = 24; // Si tiene contraseña, los 24 primeros bytes están ocupados
 			
-		} else i = 4;
+		} else i = 4; // Sino, sólo los 4 primeros bytes están ocupados
 		
 		while (i < paqueteBytes.length) {
 			
@@ -138,7 +143,7 @@ public class Paquete {
 				
 			}
 			
-			paquetesRIPv2.add(new RIPv2(paqueteRIPv2));
+			paquetesRIPv2.add(new RIPv2(paqueteRIPv2)); // Cremos un elemento RIPv2 por cada 20 bytes
 			
 		}
 		
@@ -152,6 +157,8 @@ public class Paquete {
 	}
 	
 	public static String obtenerClave (byte[] paqueteBytes) {
+		
+		// Obtenemos la clave del paquete RIP recibido.
 		
 		String passwordString = null;
 
